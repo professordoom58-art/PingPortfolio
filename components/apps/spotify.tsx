@@ -26,7 +26,7 @@ export default function Spotify({ isDarkMode = true }: SpotifyProps) {
     {
       title: "Good Morning",
       artist: "Kanye West",
-      cover: "/Kanye.jpg",
+      cover: "/kanye.jpg",
       file: "/Good Morning.mp3",
       duration: "3:15",
     },
