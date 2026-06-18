@@ -8,7 +8,7 @@ import type { AppWindow } from "@/types"
 
 // Updated app list with Snake game
 const dockApps = [
-  { id: "launchpad", title: "Launchpad", icon: "/Launchpad.png", component: "Launchpad", isSystem: true },
+  { id: "launchpad", title: "Launchpad", icon: "/launchpad.png", component: "Launchpad", isSystem: true },
   { id: "safari", title: "Safari", icon: "/safari.png", component: "Safari" },
   { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail" },
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
