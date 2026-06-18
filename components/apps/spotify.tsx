@@ -26,14 +26,14 @@ export default function Spotify({ isDarkMode = true }: SpotifyProps) {
     {
       title: "Good Morning",
       artist: "Kanye West",
-      cover: "/Kanye.png",
+      cover: "/Kanye.jpg",
       file: "/Good Morning.mp3",
       duration: "3:15",
     },
     {
       title: "National Treasures",
       artist: "Drake",
-      cover: "/drake.png",
+      cover: "/drake.jpg",
       // Fallback to the first track if the second one isn't available
       file: "/National Treasures.mp3",
       duration: "3:20",
@@ -41,7 +41,7 @@ export default function Spotify({ isDarkMode = true }: SpotifyProps) {
     {
       title: "Doomsday",
       artist: "MF DOOM",
-      cover: "/doomsday.png",
+      cover: "/doomsday.jpg",
       // Fallback to the first track if the third one isn't available
       file: "/Doomsday.mp3",
       duration: "4:58",
