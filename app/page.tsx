@@ -6,6 +6,7 @@ import LoginScreen from "@/components/login-screen"
 import Desktop from "@/components/desktop"
 import SleepScreen from "@/components/sleep-screen"
 import ShutdownScreen from "@/components/shutdown-screen"
+import IOSHome from "@/components/ios/ios-home"
 
 type SystemState = "booting" | "login" | "desktop" | "sleeping" | "shutdown" | "restarting"
 
@@ -13,26 +14,26 @@ export default function Home() {
   const [systemState, setSystemState] = useState<SystemState>("booting")
   const [isDarkMode, setIsDarkMode] = useState(false) // Default to light mode
   const [screenBrightness, setScreenBrightness] = useState(90)
+  const [isMobile, setIsMobile] = useState(false)
 
-  // Simulate boot sequence
-  useEffect(() => {
-    if (systemState === "booting") {
-      const timer = setTimeout(() => {
-        setSystemState("login")
-      }, 3000) // 3 seconds boot sequence
+// Simulate boot sequence
+useEffect(() => {
+  if (systemState === "booting") {
+    const timer = setTimeout(() => {
+      setSystemState(isMobile ? "desktop" : "login")
+    }, 3000)
 
-      return () => clearTimeout(timer)
-    }
+    return () => clearTimeout(timer)
+  }
 
-    if (systemState === "restarting") {
-      // First show boot screen
-      const bootTimer = setTimeout(() => {
-        setSystemState("login")
-      }, 3000) // 3 seconds boot sequence
+  if (systemState === "restarting") {
+    const bootTimer = setTimeout(() => {
+      setSystemState(isMobile ? "desktop" : "login")
+    }, 3000)
 
-      return () => clearTimeout(bootTimer)
-    }
-  }, [systemState])
+    return () => clearTimeout(bootTimer)
+  }
+}, [systemState, isMobile])
 
   // Load settings from localStorage
   useEffect(() => {
@@ -47,9 +48,14 @@ export default function Home() {
     }
   }, [])
 
-  const handleLogin = () => {
+const handleLogin = () => {
+  if (isMobile) {
     setSystemState("desktop")
+    return
   }
+
+  setSystemState("desktop")
+}
 
   const handleLogout = () => {
     setSystemState("login")
@@ -85,7 +91,17 @@ export default function Home() {
     setScreenBrightness(value)
     localStorage.setItem("screenBrightness", value.toString())
   }
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
 
+    checkMobile()
+
+    window.addEventListener("resize", checkMobile)
+
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
   // Render the appropriate screen based on system state
   const renderScreen = () => {
     switch (systemState) {
@@ -97,6 +113,10 @@ export default function Home() {
         return <LoginScreen onLogin={handleLogin} isDarkMode={isDarkMode} onToggleDarkMode={toggleDarkMode} />
 
       case "desktop":
+        if (isMobile) {
+          return <IOSHome />
+        }
+
         return (
           <Desktop
             onLogout={handleLogout}
