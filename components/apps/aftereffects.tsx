@@ -16,6 +16,7 @@ export default function AfterEffects({
   const cardClass = isDarkMode
     ? "bg-zinc-800 border-zinc-700"
     : "bg-white border-gray-200 shadow-sm"
+
   const pillClass = isDarkMode ? "bg-zinc-800" : "bg-gray-100"
 
   return (
@@ -36,7 +37,10 @@ export default function AfterEffects({
             height={28}
             className="object-contain"
           />
-          <span className="font-medium">Adobe After Effects</span>
+
+          <span className="font-medium">
+            Adobe After Effects
+          </span>
         </div>
 
         <button
@@ -82,114 +86,145 @@ export default function AfterEffects({
           </div>
         </div>
 
-        {/* Main Area */}
+        {/* Main Content */}
         <div className="flex-1 p-8 overflow-auto">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-5 mb-8">
             <Image
               src="/aftereffects.png"
               alt="After Effects"
-              width={64}
-              height={64}
-              className="object-contain"
+              width={72}
+              height={72}
             />
 
             <div>
-              <h1 className="text-3xl font-bold">After Effects</h1>
+              <h1 className="text-4xl font-bold">
+                After Effects
+              </h1>
+
               <p className={mutedTextClass}>
                 Motion Design • Visual Effects • Animation
               </p>
             </div>
           </div>
 
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Sparkles size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Visual Effects</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Create cinematic effects, compositing and advanced visual
-                sequences.
-              </p>
-            </div>
+          {/* Compact Feature Cards */}
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Layers size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Motion Graphics</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Build animated titles, lower thirds and branding systems.
-              </p>
-            </div>
+<div className="grid grid-cols-3 gap-6 mb-10 max-w-3xl">
+  <div
+    className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+  >
+    <Sparkles size={24} className="mb-2 shrink-0" />
+    <span className="font-semibold text-center leading-tight">
+      Visual
+      <br />
+      Effects
+    </span>
+  </div>
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Wand2 size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Compositing</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Combine footage, graphics and effects into polished scenes.
-              </p>
-            </div>
-          </div>
+  <div
+    className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+  >
+    <Layers size={24} className="mb-2 shrink-0" />
+    <span className="font-semibold text-center leading-tight">
+      Motion
+      <br />
+      Graphics
+    </span>
+  </div>
 
-          {/* Portfolio Section */}
-          <div className="mt-10">
-            <h2 className="text-xl font-semibold mb-6">
-              Featured Motion Work
-            </h2>
+  <div
+    className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+  >
+    <Wand2 size={24} className="mb-2 shrink-0" />
+    <span className="font-semibold text-center leading-tight">
+      Compositing
+    </span>
+  </div>
+</div>
+          {/* Featured Work */}
+{/* Featured Work */}
 
-            <div className="grid lg:grid-cols-2 gap-6">
-              {/* Video 1 */}
-              <div
-                className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}
-              >
-                <iframe
-                  className="w-full aspect-video"
-                  src="https://www.youtube.com/embed/xCuF4gisbJc?rel=0"
-                  title="Motion Graphics Edit"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-                <div className="p-4">
-                  <h3 className="font-semibold">Motion Graphics Edit</h3>
-                </div>
-              </div>
+<div className="mt-8">
+  <h2 className="text-2xl font-semibold mb-6">
+    Check Out My Skills
+  </h2>
 
-              {/* Video 2 */}
-              <div
-                className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}
-              >
-                <iframe
-                  className="w-full aspect-video"
-                  src="https://www.youtube.com/embed/VdNYaZsVRTg?rel=0"
-                  title="VFX Showcase"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-                <div className="p-4">
-                  <h3 className="font-semibold">VFX Showcase</h3>
-                </div>
-              </div>              {/* Video 3 */}
-              <div
-                className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass} lg:col-span-2`}
-              >
-                <iframe
-                  className="w-full aspect-video"
-                  src="https://www.youtube.com/embed/Rhef5voXc1I?rel=0"
-                  title="Cinematic Edit"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-                <div className="p-4">
-                  <h3 className="font-semibold">Cinematic Edit</h3>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="space-y-10">
 
-          {/* Skills */}
-          <div className="mt-10">
-            <h2 className="text-xl font-semibold mb-4">
+    {/* Video 1 */}
+    <div className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}>
+      <iframe
+        className="block w-full aspect-video"
+        src="https://www.youtube.com/embed/xCuF4gisbJc?rel=0"
+        title="Apple Music UI"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      />
+      <div className="p-5">
+        <h3 className="text-xl font-semibold">
+          Apple Music UI
+        </h3>
+      </div>
+    </div>
+
+    {/* Video 2 */}
+    <div className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}>
+      <iframe
+        className="block w-full aspect-video"
+        src="https://www.youtube.com/embed/VdNYaZsVRTg?rel=0"
+        title="Newspaper Cutout B-roll"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      />
+      <div className="p-5">
+        <h3 className="text-xl font-semibold">
+          Newspaper Cutout B-roll
+        </h3>
+      </div>
+    </div>
+
+    {/* Video 3 */}
+    <div className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}>
+      <iframe
+        className="block w-full aspect-video"
+        src="https://www.youtube.com/embed/Rhef5voXc1I?rel=0"
+        title="Retro TV - NEWS"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      />
+      <div className="p-5">
+        <h3 className="text-xl font-semibold">
+          Retro TV - NEWS
+        </h3>
+      </div>
+    </div>
+
+    {/* Video 4 */}
+    <div className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}>
+      <iframe
+        className="block w-full aspect-video"
+        src="https://www.youtube.com/embed/HlOH_RqeifU?rel=0"
+        title="Article on Blue Mat - B roll"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      />
+      <div className="p-5">
+        <h3 className="text-xl font-semibold">
+          Article on Blue Mat - B roll
+        </h3>
+      </div>
+    </div>
+
+  </div>
+</div>
+          {/* Services */}
+
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-5">
               Services
             </h2>
 
@@ -212,8 +247,7 @@ export default function AfterEffects({
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </div>        </div>
       </div>
     </div>
   )

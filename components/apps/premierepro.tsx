@@ -18,11 +18,10 @@ export default function PremierePro({
 
   return (
     <div
-      className={`h-full flex flex-col ${
-        isDarkMode
-          ? "bg-zinc-900 text-white"
-          : "bg-white text-black"
-      }`}
+      className={`h-full flex flex-col ${isDarkMode
+        ? "bg-zinc-900 text-white"
+        : "bg-white text-black"
+        }`}
     >
       {/* Header */}
       <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
@@ -41,8 +40,8 @@ export default function PremierePro({
 
         <button
           onClick={() =>
-            (window.location.href =
-              "mailto:pingmihir@outlook.com?subject=Premiere Pro Inquiry")
+          (window.location.href =
+            "mailto:pingmihir@outlook.com?subject=Premiere Pro Inquiry")
           }
           className="flex items-center gap-2 px-3 py-1 rounded bg-purple-700 hover:bg-purple-600 transition"
         >
@@ -90,44 +89,41 @@ export default function PremierePro({
                 Premiere Pro
               </h1>
               <p className={mutedTextClass}>
-                Video Editing • Storytelling • Motion Content
+                Documentary • Long-Form • Storytelling
               </p>
             </div>
           </div>
 
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Video size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">
-                New Project
-              </h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Start editing a new video project from scratch.
-              </p>
+          {/* Expertise */}
+
+          <div className="grid md:grid-cols-3 gap-4 max-w-4xl mb-10">
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <Video size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Documentary
+              </span>
             </div>
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <FolderOpen size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">
-                Open Project
-              </h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Continue working on existing projects.
-              </p>
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <FolderOpen size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Explainers
+              </span>
             </div>
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Clock size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">
-                Recent Work
-              </h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Quickly access recently edited timelines.
-              </p>
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <Clock size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Narrative
+              </span>
             </div>
           </div>
-
           {/* Portfolio Section */}
           <div className="mt-10">
             <h2 className="text-xl font-semibold mb-4">
