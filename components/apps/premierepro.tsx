@@ -124,27 +124,95 @@ export default function PremierePro({
               </span>
             </div>
           </div>
-          {/* Portfolio Section */}
+          {/* Editing Dashboard */}
+
           <div className="mt-10">
-            <h2 className="text-xl font-semibold mb-4">
-              Featured Projects
+            <h2 className="text-xl font-semibold mb-5">
+              Editing Workspace
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-5">
-              <div className="aspect-video rounded-xl bg-gradient-to-br from-purple-900 via-purple-700 to-black flex items-center justify-center">
-                <span className="text-lg font-medium">
-                  Commercial Edit
+            {/* Timeline Mockup */}
+
+            <div
+              className={`rounded-xl border p-6 ${cardClass} mb-6 overflow-hidden`}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-semibold text-lg">
+                  Editing Timeline
+                </h3>
+
+                <span className={`text-sm ${mutedTextClass}`}>
+                  Creatively Processing...
                 </span>
               </div>
 
-              <div className="aspect-video rounded-xl bg-gradient-to-br from-indigo-900 via-purple-800 to-black flex items-center justify-center">
-                <span className="text-lg font-medium">
-                  Documentary Reel
-                </span>
+              <div className="space-y-5">
+                {[
+                  { label: "Narrative Cut", width: "92%" },
+                  { label: "Motion Graphics", width: "74%" },
+                  { label: "Sound Design", width: "100%" },
+                ].map((track) => (
+                  <div key={track.label} className="flex items-center gap-4">
+                    <span className={`w-36 text-sm ${mutedTextClass}`}>
+                      {track.label}
+                    </span>
+
+                    <div className="flex-1 h-8 bg-zinc-900 rounded overflow-hidden relative">
+                      <div
+                        className="h-full rounded bg-gradient-to-r from-purple-700 via-fuchsia-500 to-violet-400"
+                        style={{ width: track.width }}
+                      />
+
+                      <div className="absolute left-[72%] top-0 bottom-0 w-[2px] bg-white/80" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex justify-between text-xs text-zinc-500">
+                <span>00:00</span>
+                <span>02:30</span>
+                <span>05:00</span>
+                <span>07:30</span>
+                <span>10:00</span>
+              </div>
+            </div>
+
+            {/* Stats */}
+
+            <div className="grid grid-cols-3 gap-5">
+              <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
+                <h3 className="text-4xl font-bold text-purple-400">
+                  1000+
+                </h3>
+
+                <p className={`mt-2 ${mutedTextClass}`}>
+                  Hours Edited
+                </p>
+              </div>
+
+              <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
+                <h3 className="text-4xl font-bold text-purple-400">
+                  35+
+                </h3>
+
+                <p className={`mt-2 ${mutedTextClass}`}>
+                  Projects
+                </p>
+              </div>
+
+              <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
+                <h3 className="text-4xl font-bold text-purple-400">
+                  4+
+                </h3>
+
+                <p className={`mt-2 ${mutedTextClass}`}>
+                  Years Learning
+                </p>
+
               </div>
             </div>
           </div>
-
           {/* Skills */}
           <div className="mt-10">
             <h2 className="text-xl font-semibold mb-4">
@@ -172,7 +240,7 @@ export default function PremierePro({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { useState } from "react"
 import { PenTool, Palette, Shapes, Mail } from "lucide-react"
 
 interface IllustratorProps {
@@ -15,6 +16,7 @@ export default function Illustrator({
   const mutedTextClass = isDarkMode ? "text-zinc-400" : "text-zinc-600"
   const cardClass = isDarkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-gray-200 shadow-sm"
   const pillClass = isDarkMode ? "bg-zinc-800" : "bg-gray-100"
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   return (
     <div className={`h-full flex flex-col ${isDarkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
@@ -31,8 +33,8 @@ export default function Illustrator({
 
         <button
           onClick={() =>
-            (window.location.href =
-              "mailto:pingmihir@outlook.com?subject=Illustrator Inquiry")
+          (window.location.href =
+            "mailto:pingmihir@outlook.com?subject=Illustrator Inquiry")
           }
           className="flex items-center gap-2 px-3 py-1 rounded bg-orange-700 hover:bg-orange-600"
         >
@@ -76,32 +78,66 @@ export default function Illustrator({
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <PenTool size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Vector Graphics</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Create scalable vector artwork and assets.
-              </p>
+          {/* Expertise */}
+
+          <div className="mt-8 grid md:grid-cols-3 gap-4 max-w-4xl mb-10">
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <PenTool size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Thumbnails
+              </span>
             </div>
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Palette size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Brand Identity</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Logos, typography systems and visual identity.
-              </p>
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <Palette size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Infographics
+              </span>
             </div>
 
-            <div className={`rounded-xl border p-6 ${cardClass}`}>
-              <Shapes size={32} className="mb-4" />
-              <h2 className="font-semibold mb-2">Illustrations</h2>
-              <p className={`text-sm ${mutedTextClass}`}>
-                Custom vector illustrations and iconography.
-              </p>
+            <div
+              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+            >
+              <Shapes size={22} className="shrink-0" />
+              <span className="font-semibold">
+                Branding
+              </span>
             </div>
           </div>
+          {/* Portfolio */}
 
+          <div className="mt-10">
+            <h2 className="text-xl font-semibold mb-5">
+              Check Out
+            </h2>
+
+            <div className="grid grid-cols-2 gap-5">
+              {[
+                "/thumb1.jpg",
+                "/thumb2.jpg",
+                "/thumb3.jpg",
+                "/thumb4.jpg",
+              ].map((image, index) => (
+                <div
+                  key={image}
+                  onClick={() => setSelectedImage(image)}
+                  className={`cursor-pointer overflow-hidden rounded-xl border ${borderClass} ${cardClass}`}
+                >
+                  <Image
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    width={1280}
+                    height={720}
+                    className="w-full aspect-video object-cover transition duration-300 hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="mt-10">
             <h2 className="text-xl font-semibold mb-4">
               Services
@@ -109,14 +145,14 @@ export default function Illustrator({
 
             <div className="flex flex-wrap gap-3">
               {[
-                "Logo Design",
-                "Brand Identity",
-                "Vector Illustration",
-                "Packaging Design",
-                "Icon Sets",
+                "YouTube Thumbnails",
                 "Infographics",
+                "Brand Assets",
+                "Vector Graphics",
                 "Typography",
-                "Print Design",
+                "Identity Design",
+                "Media Graphics",
+                "Video Assets",
               ].map((item) => (
                 <div
                   key={item}
@@ -127,6 +163,35 @@ export default function Illustrator({
               ))}
             </div>
           </div>
+
+          {/* Image Preview */}
+          {selectedImage && (
+            <div
+              className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-8"
+              onClick={() => setSelectedImage(null)}
+            >
+              <div
+                className="relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="absolute -top-4 -right-4 bg-zinc-900 rounded-full p-2 hover:bg-zinc-700"
+                >
+                  ✕
+                </button>
+
+                <Image
+                  src={selectedImage}
+                  alt="Preview"
+                  width={1920}
+                  height={1080}
+                  className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl"
+                />
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

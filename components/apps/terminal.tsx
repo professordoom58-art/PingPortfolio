@@ -107,7 +107,7 @@ export default function Terminal({ isDarkMode = true }: TerminalProps) {
           "  ls - List files",
           "  whoami - Show current user",
           "  about - About me",
-          "  skills - My technical skills",
+          "  skills - My skills",
           "  contact - Contact information",
           "",
         ])
