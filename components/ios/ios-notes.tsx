@@ -1,7 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { useMemo, useRef, useState } from "react"
+import {
+    AnimatePresence,
+    motion,
+    useScroll,
+    useTransform,
+} from "framer-motion"
+
 import {
     ChevronLeft,
     Search,
@@ -128,7 +134,34 @@ export default function IOSNotes({
     const [selectedNote, setSelectedNote] = useState<Note | null>(null)
 
     const [search, setSearch] = useState("")
-    const [scrollY, setScrollY] = useState(0)
+    const scrollRef = useRef<HTMLDivElement>(null)
+
+    const { scrollY } = useScroll({
+        container: scrollRef,
+    })
+    const titleScale = useTransform(
+        scrollY,
+        [0, 90],
+        [1, 0.74]
+    )
+
+    const titleY = useTransform(
+        scrollY,
+        [0, 90],
+        [0, -55]
+    )
+
+    const titleOpacity = useTransform(
+        scrollY,
+        [0, 70],
+        [1, 0]
+    )
+
+    const navOpacity = useTransform(
+        scrollY,
+        [40, 90],
+        [0, 1]
+    )
     const filteredNotes = useMemo(() => {
         if (!search.trim()) return NOTES
 
@@ -160,22 +193,34 @@ export default function IOSNotes({
             <div className="absolute top-14 left-5 z-50">
 
                 <button
-                    onClick={onBack}
+                    onClick={() => {
+                        if (selectedNote) {
+                            setSelectedNote(null)
+                        } else {
+                            onBack?.()
+                        }
+                    }}
                     className="
-            flex
-            items-center
-            justify-center
-            w-14
-            h-14
-            rounded-full
-            bg-[#1c1c1e]/90
-            backdrop-blur-xl
-            border
-            border-white/10
-            shadow-[inset_0_0_18px_rgba(255,255,255,.03)]
-            active:scale-95
-            transition
-        "
+flex
+items-center
+justify-center
+w-14
+h-14
+rounded-full
+
+bg-white/[0.08]
+
+backdrop-blur-2xl
+
+border
+border-white/[0.08]
+
+shadow-[0_6px_30px_rgba(0,0,0,.35),inset_0_1px_0_rgba(255,255,255,.08)]
+
+active:scale-95
+transition-all
+duration-200
+"
                 >
                     <ChevronLeft
                         size={28}
@@ -211,6 +256,20 @@ export default function IOSNotes({
                 </button>
 
             </div>
+            <div
+                className="
+    pointer-events-none
+    absolute
+    inset-x-0
+    top-0
+    h-36
+    z-40
+    bg-gradient-to-b
+    from-black
+    via-black/90
+    to-transparent
+  "
+            />
             <AnimatePresence mode="wait">
 
 
@@ -221,6 +280,7 @@ export default function IOSNotes({
                 {!selectedNote ? (
 
                     <motion.div
+                        ref={scrollRef}
                         key="notes-list"
                         initial={{ x: -15, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -231,12 +291,11 @@ export default function IOSNotes({
                             damping: 36,
                             mass: 0.9,
                         }}
-                        onScroll={(e) => setScrollY(e.currentTarget.scrollTop)}
-                        className="absolute inset-0 overflow-y-auto pb-24"
+                        className="absolute inset-0 overflow-y-auto pt-28 pb-24"
                     >
 
                         {/* Search */}
-                        <div className="px-5 pt-5 pb-3">
+                        <div className="px-5 pb-3">
                             <h1 className="text-[30px] font-bold tracking-[-0.03em] text-white">
                                 Notes
                             </h1>
@@ -409,10 +468,13 @@ export default function IOSNotes({
                             mass: 0.9,
                         }}
                         className="
-              h-full
-              flex
-              flex-col
-            "
+    absolute
+    inset-0
+    overflow-y-auto
+    px-6
+    pt-28
+    pb-24
+"
                     >
 
                         {/* Content */}
