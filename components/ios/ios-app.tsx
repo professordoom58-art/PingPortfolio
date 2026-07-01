@@ -9,6 +9,8 @@ interface IOSAppProps {
     children: React.ReactNode
     onBack: () => void
     layoutId: string
+    showTitle?: boolean
+    showAppChrome?: boolean
 }
 
 export default function IOSApp({
@@ -16,6 +18,8 @@ export default function IOSApp({
     children,
     onBack,
     layoutId,
+    showTitle = true,
+    showAppChrome = true,
 }: IOSAppProps) {
     return (
         <motion.div
@@ -46,36 +50,39 @@ export default function IOSApp({
             {/* Status Bar */}
             <IOSStatusBar />
 
-            {/* Dynamic Island */}
-            <div
-                className="absolute top-3 left-1/2 -translate-x-1/2
-                   w-32 h-9 rounded-full bg-black
-                   shadow-[0_0_20px_rgba(0,0,0,0.45)]
-                   z-50"
-            />
+            {showAppChrome && (
+                <div
+                    className="absolute top-3 left-1/2 -translate-x-1/2
+                       w-32 h-9 rounded-full bg-black
+                       shadow-[0_0_20px_rgba(0,0,0,0.45)]
+                       z-50"
+                />
+            )}
 
             {/* Main Layout */}
-            <div className="pt-14 h-full flex flex-col">
+            <div className={`${showAppChrome ? "pt-14" : "pt-0"} h-full flex flex-col`}>
 
                 {/* Navigation Bar */}
-                <div className="h-14 flex items-center justify-between px-4 bg-black/40 backdrop-blur-xl border-b border-white/10">
+                {showAppChrome && (
+                    <div className="h-14 flex items-center justify-between px-4 bg-black/40 backdrop-blur-xl border-b border-white/10">
 
-                    <button
-                        onClick={onBack}
-                        className="flex items-center gap-1 text-blue-400 font-medium"
-                    >
-                        <ChevronLeft size={22} />
-                        Home
-                    </button>
+                        <button
+                            onClick={onBack}
+                            className="flex items-center gap-1 text-blue-400 font-medium"
+                        >
+                            <ChevronLeft size={22} />
+                            Home
+                        </button>
 
-                    <span className="font-semibold">
-                        {title}
-                    </span>
+                        <span className="font-semibold">
+                            {showTitle ? title : null}
+                        </span>
 
-                    {/* Spacer */}
-                    <div className="w-12" />
+                        {/* Spacer */}
+                        <div className="w-12" />
 
-                </div>
+                    </div>
+                )}
 
                 {/* App Content */}
                 <div className="flex-1 overflow-y-auto">

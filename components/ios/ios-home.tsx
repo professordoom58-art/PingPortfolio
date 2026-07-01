@@ -9,8 +9,10 @@ import IOSApp from "./ios-app"
 import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
 import Photoshop from "@/components/apps/photoshop"
+import IOSNotes from "@/components/ios/ios-notes"
 import Illustrator from "@/components/apps/illustrator"
 import { LayoutGroup } from "framer-motion"
+import iosnotes from "@/components/ios/ios-notes"
 
 export default function IOSHome() {
   const [activeApp, setActiveApp] = useState<string | null>(null)
@@ -76,6 +78,7 @@ export default function IOSHome() {
             window.location.href =
             "mailto:pingmihir@outlook.com?subject=Portfolio Inquiry"
           }
+          onNotesClick={() => setActiveApp("notes")}
         />
         {activeApp === "premiere" && (
           <IOSApp
@@ -125,6 +128,20 @@ export default function IOSHome() {
             <Photoshop
               isMobile
               hideAdobeHeader
+            />
+          </IOSApp>
+        )}
+        {activeApp === "notes" && (
+          <IOSApp
+            layoutId="notes"
+            title="Notes"
+            showTitle={false}
+            showAppChrome={false}
+            onBack={() => setActiveApp(null)}
+          >
+            <IOSNotes
+              isMobile
+              onClose={() => setActiveApp(null)}
             />
           </IOSApp>
         )}

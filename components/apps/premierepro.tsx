@@ -325,8 +325,9 @@ export default function PremierePro({
 
               <div className="grid grid-cols-2 gap-4 mt-6">
 
-                <div className={`rounded-2xl border p-5 ${cardClass}`}>
-
+                <div
+                  className={`rounded-2xl border p-5 ${cardClass} flex flex-col items-center justify-center text-center`}
+                >
                   <h3 className="text-3xl font-bold text-purple-400">
                     1000+
                   </h3>
@@ -334,11 +335,11 @@ export default function PremierePro({
                   <p className={`mt-2 text-sm ${mutedTextClass}`}>
                     Hours Edited
                   </p>
-
                 </div>
 
-                <div className={`rounded-2xl border p-5 ${cardClass}`}>
-
+                <div
+                  className={`rounded-2xl border p-5 ${cardClass} flex flex-col items-center justify-center text-center`}
+                >
                   <h3 className="text-3xl font-bold text-purple-400">
                     35+
                   </h3>
@@ -346,11 +347,11 @@ export default function PremierePro({
                   <p className={`mt-2 text-sm ${mutedTextClass}`}>
                     Projects
                   </p>
-
                 </div>
 
-                <div className={`rounded-2xl border p-5 col-span-2 ${cardClass}`}>
-
+                <div
+                  className={`rounded-2xl border p-5 col-span-2 ${cardClass} flex flex-col items-center justify-center text-center`}
+                >
                   <h3 className="text-3xl font-bold text-purple-400">
                     4+
                   </h3>
@@ -358,7 +359,6 @@ export default function PremierePro({
                   <p className={`mt-2 text-sm ${mutedTextClass}`}>
                     Years Learning
                   </p>
-
                 </div>
 
               </div>
@@ -462,7 +462,7 @@ export default function PremierePro({
                   </p>
                 </div>
                 <div
-                  className={`rounded-xl border p-6 text-center ${cardClass}p-6 flex flex-col items-center justify-center text-center`}
+                  className={`rounded-xl border ${cardClass} p-6 flex flex-col items-center justify-center text-center`}
                 >
                   <h3 className="text-4xl font-bold text-purple-400">
                     35+

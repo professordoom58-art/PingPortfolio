@@ -35,9 +35,9 @@ export default function IOSStatusBar() {
         <Image
           src="/arrow.svg"
           alt="Location"
-          width={11}
-          height={11}
-          className="ml-1.5 relative top-[2px]"
+          width={13}
+          height={13}
+          className="ml-1.5 relative top-[1px]"
         />
       </div>
 

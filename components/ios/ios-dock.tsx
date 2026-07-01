@@ -4,10 +4,12 @@ import Image from "next/image"
 
 interface IOSDockProps {
   onMailClick: () => void
+  onNotesClick: () => void
 }
 
 export default function IOSDock({
   onMailClick,
+  onNotesClick,
 }: IOSDockProps) {
   const dockApps = [
     {
@@ -24,10 +26,11 @@ export default function IOSDock({
       onClick: onMailClick,
     },
     {
-      id: "github",
-      icon: "/github.png",
-      alt: "GitHub",
-      scale: 0.9,
+      id: "notes",
+      icon: "/notes.png",
+      alt: "Notes",
+      scale: 0.95,
+      onClick: onNotesClick,
     },
     {
       id: "contact",
