@@ -8,35 +8,39 @@ interface IOSAppProps {
     title: string
     children: React.ReactNode
     onBack: () => void
+    layoutId: string
 }
 
 export default function IOSApp({
     title,
     children,
     onBack,
+    layoutId,
 }: IOSAppProps) {
     return (
         <motion.div
+            layoutId={layoutId}
             initial={{
-                opacity: 0,
-                scale: 0.94,
-                y: 40,
+                borderRadius: 28,
+                opacity: 0.9,
+                scale: 0.92,
             }}
             animate={{
+                borderRadius: 0,
                 opacity: 1,
                 scale: 1,
-                y: 0,
             }}
             exit={{
-                opacity: 0,
-                scale: 0.94,
-                y: 40,
+                borderRadius: 28,
+                opacity: 0.9,
+                scale: 0.92,
             }}
             transition={{
-                duration: 0.28,
-                ease: [0.22, 1, 0.36, 1],
+                type: "spring",
+                stiffness: 380,
+                damping: 32,
             }}
-            className="fixed inset-0 bg-zinc-950 text-white overflow-hidden"
+            className="fixed inset-0 bg-zinc-950 text-white overflow-hidden z-[100]"
         >
 
             {/* Status Bar */}

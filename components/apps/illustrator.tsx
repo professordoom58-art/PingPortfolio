@@ -3,13 +3,17 @@
 import Image from "next/image"
 import { useState } from "react"
 import { PenTool, Palette, Shapes, Mail } from "lucide-react"
+import { X } from "lucide-react"
 
 interface IllustratorProps {
   isDarkMode?: boolean
+  isMobile?: boolean
+  hideAdobeHeader?: boolean
 }
-
 export default function Illustrator({
   isDarkMode = true,
+  isMobile = false,
+  hideAdobeHeader = false,
 }: IllustratorProps) {
   const borderClass = isDarkMode ? "border-zinc-700" : "border-gray-200"
   const hoverClass = isDarkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"
@@ -18,60 +22,71 @@ export default function Illustrator({
   const pillClass = isDarkMode ? "bg-zinc-800" : "bg-gray-100"
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
+
   return (
     <div className={`h-full flex flex-col ${isDarkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
-      <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
-        <div className="flex items-center gap-3">
-          <Image
-            src="/illustrator.png"
-            alt="Illustrator"
-            width={28}
-            height={28}
-          />
-          <span>Adobe Illustrator</span>
-        </div>
-
-        <button
-          onClick={() =>
-          (window.location.href =
-            "mailto:pingmihir@outlook.com?subject=Illustrator Inquiry")
-          }
-          className="flex items-center gap-2 px-3 py-1 rounded bg-orange-700 hover:bg-orange-600"
-        >
-          <Mail size={16} />
-          Connect
-        </button>
-      </div>
-
-      <div className="flex flex-1">
-        <div className={`w-64 border-r ${borderClass} p-4`}>
-          <div className="space-y-2">
-            <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
-              Home
-            </button>
-            <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
-              Vector Projects
-            </button>
-            <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
-              Branding
-            </button>
-            <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
-              Templates
-            </button>
-          </div>
-        </div>
-
-        <div className="flex-1 p-8 overflow-auto">
-          <div className="flex items-center gap-4 mb-8">
+      {!hideAdobeHeader && (
+        <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
+          <div className="flex items-center gap-3">
             <Image
               src="/illustrator.png"
               alt="Illustrator"
-              width={64}
-              height={64}
+              width={28}
+              height={28}
+            />
+            <span>Adobe Illustrator</span>
+          </div>
+
+          <button
+            onClick={() =>
+            (window.location.href =
+              "mailto:pingmihir@outlook.com?subject=Illustrator Inquiry")
+            }
+            className="flex items-center gap-2 px-3 py-1 rounded bg-orange-700 hover:bg-orange-600"
+          >
+            <Mail size={16} />
+            Connect
+          </button>
+        </div>
+      )}
+
+      <div className="flex flex-1">
+
+        {!isMobile && (
+          <div className={`w-64 border-r ${borderClass} p-4`}>
+            <div className="space-y-2">
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Home
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Vector Projects
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Branding
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Templates
+              </button>
+            </div>
+          </div>)}
+
+        <div
+          className={`flex-1 overflow-auto ${isMobile ? "p-5" : "p-8"
+            }`}
+        >
+          <div
+            className={`flex items-center ${isMobile ? "gap-3 mb-6" : "gap-4 mb-8"
+              }`}
+          >
+            <Image
+              src="/illustrator.png"
+              alt="Illustrator"
+              width={isMobile ? 48 : 64}
+              height={isMobile ? 48 : 64}
             />
 
             <div>
-              <h1 className="text-3xl font-bold">Illustrator</h1>
+              <h1 className={isMobile ? "text-2xl font-bold" : "text-3xl font-bold"}>Illustrator</h1>
               <p className={mutedTextClass}>
                 Vector Design • Branding • Illustration
               </p>
@@ -80,7 +95,12 @@ export default function Illustrator({
 
           {/* Expertise */}
 
-          <div className="mt-8 grid md:grid-cols-3 gap-4 max-w-4xl mb-10">
+          <div
+            className={`mt-8 grid gap-4 mb-10 ${isMobile
+              ? "grid-cols-1"
+              : "md:grid-cols-3 max-w-4xl"
+              }`}
+          >
             <div
               className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
             >
@@ -115,29 +135,58 @@ export default function Illustrator({
               Check Out
             </h2>
 
-            <div className="grid grid-cols-2 gap-5">
+            <div
+              className={
+                isMobile
+                  ? "space-y-5"
+                  : "grid grid-cols-2 gap-5"
+              }
+            >
               {[
-                "/thumb1.jpg",
-                "/thumb2.jpg",
-                "/thumb3.jpg",
-                "/thumb4.jpg",
-              ].map((image, index) => (
+                {
+                  image: "/thumb1.jpg",
+                  title: "Thumbnail Design",
+                },
+                {
+                  image: "/thumb2.jpg",
+                  title: "Infographic",
+                },
+                {
+                  image: "/thumb3.jpg",
+                  title: "Brand Artwork",
+                },
+                {
+                  image: "/thumb4.jpg",
+                  title: "Media Graphic",
+                },
+
+              ].map((item) => (
                 <div
-                  key={image}
-                  onClick={() => setSelectedImage(image)}
-                  className={`cursor-pointer overflow-hidden rounded-xl border ${borderClass} ${cardClass}`}
+                  key={item.image}
+                  onClick={() => setSelectedImage(item.image)}
+                  className={`cursor-pointer overflow-hidden ${isMobile ? "rounded-2xl" : "rounded-xl"
+                    } border ${borderClass} ${cardClass}`}
                 >
                   <Image
-                    src={image}
-                    alt={`Thumbnail ${index + 1}`}
+                    src={item.image}
+                    alt={item.title}
                     width={1280}
                     height={720}
-                    className="w-full aspect-video object-cover transition duration-300 hover:scale-105"
+                    className={`w-full object-cover transition duration-300 hover:scale-105 ${isMobile ? "h-52" : "aspect-video"
+                      }`}
                   />
+
+                  <div className={isMobile ? "px-5 py-4" : "p-4"}>
+                    <h3 className={isMobile ? "text-lg font-semibold" : "font-semibold"}>
+                      {item.title}
+                    </h3>
+                  </div>
+
                 </div>
               ))}
             </div>
           </div>
+          {/* Services */}
           <div className="mt-10">
             <h2 className="text-xl font-semibold mb-4">
               Services
@@ -165,33 +214,51 @@ export default function Illustrator({
           </div>
 
           {/* Image Preview */}
+
           {selectedImage && (
             <div
-              className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-8"
+              className={`fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md flex ${isMobile
+                ? "items-center justify-center p-4"
+                : "items-center justify-center"
+                }`}
               onClick={() => setSelectedImage(null)}
             >
               <div
-                className="relative"
-                onClick={(e) => e.stopPropagation()}
+                className={`relative bg-zinc-900 ${isMobile
+                  ? "w-[94vw] max-w-none rounded-3xl p-4"
+                  : "max-w-6xl w-full rounded-2xl p-6"
+                  }`}
               >
-                <button
-                  onClick={() => setSelectedImage(null)}
-                  className="absolute -top-4 -right-4 bg-zinc-900 rounded-full p-2 hover:bg-zinc-700"
-                >
-                  ✕
-                </button>
+                {!isMobile && (
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="absolute top-4 right-4 w-7 h-7 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors"
+                  >
+                    <X size={13} className="text-white" strokeWidth={2.5} />
+                  </button>
+                )}
 
                 <Image
                   src={selectedImage}
                   alt="Preview"
                   width={1920}
                   height={1080}
-                  className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl"
+                  onClick={() => isMobile && setSelectedImage(null)}
+                  className={`w-full object-contain cursor-pointer ${isMobile
+                      ? "rounded-2xl"
+                      : "max-h-[70vh] rounded-xl"
+                    }`}
                 />
+                {!isMobile && (
+                  <div className="mt-5 text-center">
+                    <p className="text-zinc-400">
+                      Created using Adobe Illustrator
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>

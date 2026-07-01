@@ -20,8 +20,10 @@ import Photoshop from "@/components/apps/photoshop"
 import Illustrator from "@/components/apps/illustrator"
 
 
-
-const componentMap: Record<string, React.ComponentType<{ isDarkMode?: boolean }>> = {
+const componentMap: Record<
+  string,
+  React.ComponentType<{ isDarkMode?: boolean }>
+> = {
   Notes,
   Safari,
   FaceTime,
@@ -45,7 +47,13 @@ interface WindowProps {
   isDarkMode: boolean
 }
 
-export default function Window({ window, isActive, onClose, onFocus, isDarkMode }: WindowProps) {
+export default function Window({
+  window,
+  isActive,
+  onClose,
+  onFocus,
+  isDarkMode,
+}: WindowProps) {
   const [position, setPosition] = useState(window.position)
   const [size, setSize] = useState(window.size)
   const [isDragging, setIsDragging] = useState(false)
@@ -245,7 +253,9 @@ export default function Window({ window, isActive, onClose, onFocus, isDarkMode 
 
       {/* Window content */}
       <div className={`${contentBgClass} h-[calc(100%-2rem)] overflow-auto`}>
-        {AppComponent ? <AppComponent isDarkMode={isDarkMode} /> : <div className="p-4">Content not available</div>}
+        {AppComponent ? <AppComponent
+          isDarkMode={isDarkMode}
+        /> : <div className="p-4">Content not available</div>}
       </div>
 
       {/* Resize handles */}

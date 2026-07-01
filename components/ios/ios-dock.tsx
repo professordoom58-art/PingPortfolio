@@ -2,42 +2,76 @@
 
 import Image from "next/image"
 
+const dockApps = [
+  {
+    id: "safari",
+    icon: "/safari.png",
+    alt: "Safari",
+    scale: 1.0,
+  },
+  {
+    id: "mail",
+    icon: "/mail.png",
+    alt: "Mail",
+    scale: 0.95,
+  },
+  {
+    id: "github",
+    icon: "/github.png",
+    alt: "GitHub",
+    scale: 0.90,
+  },
+  {
+    id: "contact",
+    icon: "/contact.png",
+    alt: "Contact",
+    scale: 0.85,
+  },
+]
+
 export default function IOSDock() {
   return (
-    <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-
-      <div className="flex items-center gap-5 rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-3xl px-6 py-4 shadow-2xl">
-
-        <Image
-          src="/safari.png"
-          alt="Safari"
-          width={58}
-          height={58}
-        />
-
-        <Image
-          src="/mail.png"
-          alt="Mail"
-          width={58}
-          height={58}
-        />
-
-        <Image
-          src="/github.png"
-          alt="GitHub"
-          width={58}
-          height={58}
-        />
-
-        <Image
-          src="/contact.png"
-          alt="Contact"
-          width={58}
-          height={58}
-        />
-
+    <div className="absolute bottom-7 left-1/2 -translate-x-1/2 z-40">
+      <div
+        className="
+          flex items-center
+          gap-4
+          px-5
+          py-3
+          rounded-[32px]
+          bg-white/10
+          backdrop-blur-3xl
+          border border-white/15
+          shadow-2xl
+        "
+      >
+        {dockApps.map((app) => (
+          <button
+            key={app.id}
+            className="
+              w-[68px]
+              h-[68px]
+              flex
+              items-center
+              justify-center
+              transition-transform
+              active:scale-90
+            "
+          >
+            <Image
+              src={app.icon}
+              alt={app.alt}
+              width={68}
+              height={68}
+              draggable={false}
+              className="select-none transition-transform"
+              style={{
+                transform: `scale(${app.scale})`,
+              }}
+            />
+          </button>
+        ))}
       </div>
-
     </div>
   )
 }

@@ -1,51 +1,78 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import {
-    Signal,
-    Wifi,
-    BatteryFull,
-} from "lucide-react"
+import Image from "next/image"
 
 export default function IOSStatusBar() {
-    const [time, setTime] = useState("")
+  const [time, setTime] = useState("")
 
-    useEffect(() => {
-        const updateTime = () => {
-            const now = new Date()
+  useEffect(() => {
+    const updateTime = () => {
+      setTime(
+        new Date().toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      )
+    }
 
-            setTime(
-                now.toLocaleTimeString([], {
-                    hour: "numeric",
-                    minute: "2-digit",
-                })
-            )
-        }
+    updateTime()
 
-        updateTime()
+    const interval = setInterval(updateTime, 1000)
 
-        const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
-        return () => clearInterval(interval)
-    }, [])
+  return (
+    <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-9 pt-4">
 
-    return (
-        <div className="absolute top-0 left-0 right-0 z-50 h-14 px-6 flex items-center justify-between text-white font-semibold">
+      {/* Time */}
 
-            <span className="text-[15px]">
-                {time}
-            </span>
+      <div className="flex items-center gap-1">
+        <Image
+          src="/arrow.svg"
+          alt="Location"
+          width={9}
+          height={9}
+          className="-translate-y-[1px]"
+        />
 
-            <div className="flex items-center gap-2">
+        <span className="font-semibold text-white">
+          {time}
+        </span>
+      </div>
 
-                <Signal size={16} />
+      {/* Icons */}
 
-                <Wifi size={16} />
+      <div className="flex items-center gap-[4px] translate-y-[1px]">
 
-                <BatteryFull size={18} />
+        <Image
+          src="/cellular.svg"
+          alt="Cellular"
+          width={17}
+          height={10}
+          priority
+        />
 
-            </div>
+        <Image
+          src="/wifi.svg"
+          alt="WiFi"
+          width={15}
+          height={11}
+          priority
+        />
 
-        </div>
-    )
+        <Image
+          src="/battery.svg"
+          alt="Battery"
+          width={24}
+          height={11}
+          priority
+        />
+
+      </div>
+
+    </div>
+  )
 }

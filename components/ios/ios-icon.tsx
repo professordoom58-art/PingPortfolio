@@ -7,42 +7,37 @@ interface IOSIconProps {
     icon: string
     title: string
     onClick: () => void
+    layoutId: string
 }
 
 export default function IOSIcon({
     icon,
     title,
     onClick,
+    layoutId,
 }: IOSIconProps) {
     return (
         <motion.button
-            whileTap={{
-                scale: 0.9,
-            }}
-
-            whileHover={{
-                scale: 1.03,
-            }}
-
+            layoutId={layoutId}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.03 }}
             transition={{
                 type: "spring",
-                stiffness: 650,
-                damping: 30,
+                stiffness: 420,
+                damping: 32,
             }}
             onClick={onClick}
             className="flex flex-col items-center"
         >
-            <div className="w-20 h-20 rounded-[22px] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-xl">
+            <div className="relative w-20 h-20 rounded-[22px] overflow-hidden">
                 <Image
                     src={icon}
                     alt={title}
-                    width={56}
-                    height={56}
-                    className="object-contain"
+                    fill
+                    className="object-cover"
                 />
             </div>
-
-            <span className="mt-2 text-white text-sm font-medium">
+            <span className="mt-2.5 text-[15px] font-medium text-white text-center leading-none">
                 {title}
             </span>
         </motion.button>

@@ -10,6 +10,7 @@ import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
 import Photoshop from "@/components/apps/photoshop"
 import Illustrator from "@/components/apps/illustrator"
+import { LayoutGroup } from "framer-motion"
 
 export default function IOSHome() {
   const [activeApp, setActiveApp] = useState<string | null>(null)
@@ -39,47 +40,64 @@ export default function IOSHome() {
 
 
   return (
-    <div
-      className="relative h-screen w-screen overflow-hidden bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/bg1.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <IOSStatusBar />
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-9 rounded-full bg-black z-50" />
+    <LayoutGroup>
+      <div
+        className="relative h-screen w-screen overflow-hidden bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/bg1.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <IOSStatusBar />
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-9 rounded-full bg-black z-50" />
 
-      <div className="px-8 pt-24">
+        <div className="px-8 pt-24">
 
-        <div className="grid grid-cols-2 gap-y-10 gap-x-6">
+          <div className="grid grid-cols-2 gap-y-10 gap-x-6">
 
-          {apps.map((app) => (
-            <IOSIcon
-              key={app.id}
-              icon={app.icon}
-              title={app.name}
-              onClick={() => setActiveApp(app.id)}
-            />
-          ))}
+            {apps.map((app) => (
+              <IOSIcon
+                layoutId={app.id}
+                key={app.id}
+                icon={app.icon}
+                title={app.name}
+                onClick={() => setActiveApp(app.id)}
+              />
+            ))}
+
+          </div>
 
         </div>
 
-      </div>
+        <IOSDock />
+        {activeApp === "premiere" && (
+          <IOSApp
+            layoutId="premiere"
+            title="Premiere Pro"
+            onBack={() => setActiveApp(null)}
+          >
+            <PremierePro
+              isMobile
+              hideAdobeHeader
+            />
+          </IOSApp>
+        )}
 
-      <IOSDock />
-      {activeApp === "premiere" && (
-        <IOSApp
-          title="Premiere Pro"
-          onBack={() => setActiveApp(null)}
-        >
-          <PremierePro
-            isMobile
-            hideAdobeHeader
-          />
-        </IOSApp>
-      )}
-    </div>
+        {activeApp === "illustrator" && (
+          <IOSApp
+            layoutId="illustrator"
+            title="Illustrator"
+            onBack={() => setActiveApp(null)}
+          >
+            <Illustrator
+              isMobile
+              hideAdobeHeader
+            />
+          </IOSApp>
+        )}
+      </div>
+    </LayoutGroup>
   )
 }
