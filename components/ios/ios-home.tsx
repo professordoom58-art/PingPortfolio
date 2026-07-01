@@ -9,10 +9,9 @@ import IOSApp from "./ios-app"
 import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
 import Photoshop from "@/components/apps/photoshop"
-import IOSNotes from "@/components/ios/ios-notes"
 import Illustrator from "@/components/apps/illustrator"
 import { LayoutGroup } from "framer-motion"
-import iosnotes from "@/components/ios/ios-notes"
+import IOSNotes from "./ios-notes"
 
 export default function IOSHome() {
   const [activeApp, setActiveApp] = useState<string | null>(null)
@@ -134,14 +133,13 @@ export default function IOSHome() {
         {activeApp === "notes" && (
           <IOSApp
             layoutId="notes"
-            title="Notes"
-            showTitle={false}
+            title=""
             showAppChrome={false}
             onBack={() => setActiveApp(null)}
           >
             <IOSNotes
               isMobile
-              onClose={() => setActiveApp(null)}
+              onBack={() => setActiveApp(null)}
             />
           </IOSApp>
         )}
