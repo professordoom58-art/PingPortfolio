@@ -71,7 +71,12 @@ export default function IOSHome() {
 
         </div>
 
-        <IOSDock />
+        <IOSDock
+          onMailClick={() =>
+            window.location.href =
+            "mailto:pingmihir@outlook.com?subject=Portfolio Inquiry"
+          }
+        />
         {activeApp === "premiere" && (
           <IOSApp
             layoutId="premiere"

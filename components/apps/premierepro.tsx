@@ -472,16 +472,11 @@ export default function PremierePro({
 
                 </div>
 
-                <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
-
-                  <h3 className="text-4xl font-bold text-purple-400">
-                    4+
-                  </h3>
-
-                  <p className={`mt-2 ${mutedTextClass}`}>
-                    Years Learning
-                  </p>
-
+                <div
+                  className={`rounded-xl border ${cardClass} h-20 flex flex-col items-center justify-center`}
+                >
+                  <h3 className="text-4xl font-bold text-purple-400">4+</h3>
+                  <p className="text-zinc-400">Years Learning</p>
                 </div>
 
               </div>

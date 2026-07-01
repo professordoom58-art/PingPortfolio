@@ -2,34 +2,41 @@
 
 import Image from "next/image"
 
-const dockApps = [
-  {
-    id: "safari",
-    icon: "/safari.png",
-    alt: "Safari",
-    scale: 1.0,
-  },
-  {
-    id: "mail",
-    icon: "/mail.png",
-    alt: "Mail",
-    scale: 0.95,
-  },
-  {
-    id: "github",
-    icon: "/github.png",
-    alt: "GitHub",
-    scale: 0.90,
-  },
-  {
-    id: "contact",
-    icon: "/contact.png",
-    alt: "Contact",
-    scale: 0.85,
-  },
-]
+interface IOSDockProps {
+  onMailClick: () => void
+}
 
-export default function IOSDock() {
+export default function IOSDock({
+  onMailClick,
+}: IOSDockProps) {
+  const dockApps = [
+    {
+      id: "safari",
+      icon: "/safari.png",
+      alt: "Safari",
+      scale: 1.0,
+    },
+    {
+      id: "mail",
+      icon: "/mail.png",
+      alt: "Mail",
+      scale: 0.95,
+      onClick: onMailClick,
+    },
+    {
+      id: "github",
+      icon: "/github.png",
+      alt: "GitHub",
+      scale: 0.9,
+    },
+    {
+      id: "contact",
+      icon: "/contact.png",
+      alt: "Contact",
+      scale: 0.85,
+    },
+  ]
+
   return (
     <div className="absolute bottom-7 left-1/2 -translate-x-1/2 z-40">
       <div
@@ -48,6 +55,7 @@ export default function IOSDock() {
         {dockApps.map((app) => (
           <button
             key={app.id}
+            onClick={app.onClick}
             className="
               w-[68px]
               h-[68px]
