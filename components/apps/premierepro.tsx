@@ -446,10 +446,13 @@ export default function PremierePro({
 
               </div>
 
-              <div className="grid grid-cols-3 gap-5">
-
-                <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
-
+              <div
+                className={`grid gap-5 ${isMobile ? "grid-cols-2" : "grid-cols-3"
+                  }`}
+              >
+                <div
+                  className={`rounded-xl border ${cardClass} p-6 flex flex-col items-center justify-center text-center`}
+                >
                   <h3 className="text-4xl font-bold text-purple-400">
                     1000+
                   </h3>
@@ -457,11 +460,10 @@ export default function PremierePro({
                   <p className={`mt-2 ${mutedTextClass}`}>
                     Hours Edited
                   </p>
-
                 </div>
-
-                <div className={`rounded-xl border p-6 text-center ${cardClass}`}>
-
+                <div
+                  className={`rounded-xl border p-6 text-center ${cardClass}p-6 flex flex-col items-center justify-center text-center`}
+                >
                   <h3 className="text-4xl font-bold text-purple-400">
                     35+
                   </h3>
@@ -469,10 +471,13 @@ export default function PremierePro({
                   <p className={`mt-2 ${mutedTextClass}`}>
                     Projects
                   </p>
-
                 </div>
+
                 <div
-                  className={`col-span-2 rounded-xl border p-6 ${cardClass} flex flex-col items-center justify-center`}
+                  className={`rounded-xl border p-6 ${isMobile
+                    ? "col-span-2 flex flex-col items-center justify-center text-center"
+                    : "text-center"
+                    } ${cardClass}p-6 flex flex-col items-center justify-center text-center`}
                 >
                   <h3 className="text-4xl font-bold text-purple-400">
                     4+
@@ -482,7 +487,6 @@ export default function PremierePro({
                     Years Learning
                   </p>
                 </div>
-
               </div>
 
             </div>
