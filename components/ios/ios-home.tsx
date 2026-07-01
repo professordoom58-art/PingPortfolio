@@ -95,6 +95,32 @@ export default function IOSHome() {
               isMobile
               hideAdobeHeader
             />
+
+
+          </IOSApp>
+        )}
+        {activeApp === "aftereffects" && (
+          <IOSApp
+            layoutId="aftereffects"
+            title="After Effects"
+            onBack={() => setActiveApp(null)}
+          >
+            <AfterEffects
+              isMobile
+              hideAdobeHeader
+            />
+          </IOSApp>
+        )}
+        {activeApp === "photoshop" && (
+          <IOSApp
+            layoutId="photoshop"
+            title="Photoshop"
+            onBack={() => setActiveApp(null)}
+          >
+            <Photoshop
+              isMobile
+              hideAdobeHeader
+            />
           </IOSApp>
         )}
       </div>

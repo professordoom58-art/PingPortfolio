@@ -81,8 +81,8 @@ export default function Illustrator({
             <Image
               src="/illustrator.png"
               alt="Illustrator"
-              width={isMobile ? 48 : 64}
-              height={isMobile ? 48 : 64}
+              width={isMobile ? 56 : 64}
+              height={isMobile ? 56 : 64}
             />
 
             <div>
@@ -94,36 +94,48 @@ export default function Illustrator({
           </div>
 
           {/* Expertise */}
-
           <div
-            className={`mt-8 grid gap-4 mb-10 ${isMobile
-              ? "grid-cols-1"
-              : "md:grid-cols-3 max-w-4xl"
+            className={`mt-8 grid gap-4 mb-10 ${isMobile ? "grid-cols-1" : "md:grid-cols-3 max-w-4xl"
               }`}
           >
             <div
-              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
             >
-              <PenTool size={22} className="shrink-0" />
-              <span className="font-semibold">
+              <PenTool
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Thumbnails
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
             >
-              <Palette size={22} className="shrink-0" />
-              <span className="font-semibold">
+              <Palette
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Infographics
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-24 px-5 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
             >
-              <Shapes size={22} className="shrink-0" />
-              <span className="font-semibold">
+              <Shapes
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Branding
               </span>
             </div>
@@ -164,24 +176,16 @@ export default function Illustrator({
                 <div
                   key={item.image}
                   onClick={() => setSelectedImage(item.image)}
-                  className={`cursor-pointer overflow-hidden ${isMobile ? "rounded-2xl" : "rounded-xl"
-                    } border ${borderClass} ${cardClass}`}
+                  className="group cursor-pointer overflow-hidden rounded-2xl"
                 >
                   <Image
                     src={item.image}
                     alt={item.title}
                     width={1280}
                     height={720}
-                    className={`w-full object-cover transition duration-300 hover:scale-105 ${isMobile ? "h-52" : "aspect-video"
+                    className={`w-full object-cover transition-transform duration-300 group-hover:scale-105 ${isMobile ? "h-52" : "aspect-video"
                       }`}
                   />
-
-                  <div className={isMobile ? "px-5 py-4" : "p-4"}>
-                    <h3 className={isMobile ? "text-lg font-semibold" : "font-semibold"}>
-                      {item.title}
-                    </h3>
-                  </div>
-
                 </div>
               ))}
             </div>
@@ -245,8 +249,8 @@ export default function Illustrator({
                   height={1080}
                   onClick={() => isMobile && setSelectedImage(null)}
                   className={`w-full object-contain cursor-pointer ${isMobile
-                      ? "rounded-2xl"
-                      : "max-h-[70vh] rounded-xl"
+                    ? "rounded-2xl"
+                    : "max-h-[70vh] rounded-xl"
                     }`}
                 />
                 {!isMobile && (
@@ -261,6 +265,6 @@ export default function Illustrator({
           )}
         </div>
       </div>
-    </div>
+    </div >
   )
 }

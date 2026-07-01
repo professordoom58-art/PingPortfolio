@@ -37,8 +37,8 @@ export default function PremierePro({
   return (
     <div
       className={`h-full flex flex-col ${isDarkMode
-          ? "bg-zinc-900 text-white"
-          : "bg-white text-black"
+        ? "bg-zinc-900 text-white"
+        : "bg-white text-black"
         }`}
     >
       {/* Desktop Header */}
@@ -118,36 +118,38 @@ export default function PremierePro({
 
         <div
           className={`flex-1 overflow-auto ${isMobile
-              ? "px-6 py-6"
-              : "p-8"
+            ? "px-6 py-6"
+            : "p-8"
             }`}
         >
 
           {/* Hero */}
 
-          <div className="flex items-center gap-4 mb-8">
+          <div
+            className={`flex items-center ${isMobile ? "gap-4 mb-6" : "gap-4 mb-8"
+              }`}
+          >
 
             <Image
               src="/premiere.png"
               alt="Premiere Pro"
-              width={isMobile ? 52 : 64}
-              height={isMobile ? 52 : 64}
-              className="object-contain"
+              width={isMobile ? 56 : 64}
+              height={isMobile ? 56 : 64}
             />
 
-            <div>
+            <div className="flex-1 min-w-0">
 
               <h1
                 className={`font-bold ${isMobile
-                    ? "text-2xl"
-                    : "text-3xl"
+                  ? "text-2xl"
+                  : "text-3xl"
                   }`}
               >
                 Premiere Pro
               </h1>
 
               <p className={mutedTextClass}>
-                Documentary • Long-Form • Storytelling
+                Narrative • Long-Form • Explainer
               </p>
 
             </div>
@@ -155,43 +157,51 @@ export default function PremierePro({
           </div>
 
           {/* Expertise */}
-
           <div
             className={`grid ${isMobile
-                ? "grid-cols-1"
-                : "md:grid-cols-3"
+              ? "grid-cols-1"
+              : "md:grid-cols-3"
               } gap-4 max-w-4xl mb-10`}
           >
-
             <div
-              className={`rounded-xl border ${cardClass} h-20 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-20 gap-3"
+                } flex items-center justify-center`}
             >
-              <Video size={22} />
-              <span className="font-semibold">
+              <Video
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Documentary
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-20 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-20 gap-3"
+                } flex items-center justify-center`}
             >
-              <FolderOpen size={22} />
-              <span className="font-semibold">
+              <FolderOpen
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Explainers
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-20 flex items-center justify-center gap-3`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-20 gap-3"
+                } flex items-center justify-center`}
             >
-              <Clock size={22} />
-              <span className="font-semibold">
+              <Clock
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Narrative
               </span>
             </div>
-
           </div>
-
           {/* Editing Dashboard */}
 
           {isMobile ? (
@@ -488,9 +498,8 @@ export default function PremierePro({
             </h2>
 
             <div
-              className={`flex flex-wrap ${
-                isMobile ? "gap-2" : "gap-3"
-              }`}
+              className={`flex flex-wrap ${isMobile ? "gap-2" : "gap-3"
+                }`}
             >
 
               {[

@@ -110,55 +110,78 @@ export default function AfterEffects({
           className={`flex-1 overflow-auto ${isMobile ? "px-6 py-6" : "p-8"
             }`}
         >
-          <div className="flex items-center gap-5 mb-8">
+          <div
+            className={`flex items-center ${isMobile ? "gap-4 mb-6" : "gap-4 mb-8"
+              }`}
+          >
             <Image
               src="/aftereffects.png"
               alt="After Effects"
-              width={72}
-              height={72}
+              width={isMobile ? 56 : 64}
+              height={isMobile ? 56 : 64}
+              className="shrink-0"
             />
 
-            <div>
-              <h1 className="text-4xl font-bold">
+            <div className="min-w-0">
+              <h1 className={isMobile ? "text-2xl font-bold" : "text-3xl font-bold"}>
                 After Effects
               </h1>
 
               <p className={mutedTextClass}>
-                Motion Design • Visual Effects • Animation
+                Motion Design • Visuals • Animation
               </p>
             </div>
           </div>
 
           {/* Compact Feature Cards */}
-
-          <div className="grid grid-cols-3 gap-6 mb-10 max-w-3xl">
+          <div
+            className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-3 max-w-3xl"
+              } gap-4 mb-10`}
+          >
             <div
-              className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
+                } flex items-center justify-center`}
             >
-              <Sparkles size={24} className="mb-2 shrink-0" />
-              <span className="font-semibold text-center leading-tight">
-                Visual
-                <br />
-                Effects
+              <Sparkles
+                size={isMobile ? 18 : 24}
+                strokeWidth={2}
+                className={isMobile ? "" : "mb-2 shrink-0"}
+              />
+              <span
+                className={`font-semibold text-center ${isMobile ? "text-[15px]" : "leading-tight"
+                  }`}
+              >
+                {isMobile ? "Visual Effects" : <>Visual<br />Effects</>}
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
+                } flex items-center justify-center`}
             >
-              <Layers size={24} className="mb-2 shrink-0" />
-              <span className="font-semibold text-center leading-tight">
-                Motion
-                <br />
-                Graphics
+              <Layers
+                size={isMobile ? 18 : 24}
+                strokeWidth={2}
+                className={isMobile ? "" : "mb-2 shrink-0"}
+              />
+              <span
+                className={`font-semibold text-center ${isMobile ? "text-[15px]" : "leading-tight"
+                  }`}
+              >
+                {isMobile ? "Motion Graphics" : <>Motion<br />Graphics</>}
               </span>
             </div>
 
             <div
-              className={`rounded-xl border ${cardClass} h-28 flex flex-col items-center justify-center`}
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
+                } flex items-center justify-center`}
             >
-              <Wand2 size={24} className="mb-2 shrink-0" />
-              <span className="font-semibold text-center leading-tight">
+              <Wand2
+                size={isMobile ? 18 : 24}
+                strokeWidth={2}
+                className={isMobile ? "" : "mb-2 shrink-0"}
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
                 Compositing
               </span>
             </div>

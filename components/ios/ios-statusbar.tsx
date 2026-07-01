@@ -8,13 +8,12 @@ export default function IOSStatusBar() {
 
   useEffect(() => {
     const updateTime = () => {
-      setTime(
-        new Date().toLocaleTimeString("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-      )
+      const now = new Date()
+
+      const hours = now.getHours() % 12 || 12
+      const minutes = now.getMinutes().toString().padStart(2, "0")
+
+      setTime(`${hours}:${minutes}`)
     }
 
     updateTime()
@@ -23,24 +22,23 @@ export default function IOSStatusBar() {
 
     return () => clearInterval(interval)
   }, [])
-
   return (
     <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-9 pt-4">
 
       {/* Time */}
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center">
+        <span className="text-white font-semibold text-[17px]">
+          {time}
+        </span>
+
         <Image
           src="/arrow.svg"
           alt="Location"
-          width={9}
-          height={9}
-          className="-translate-y-[1px]"
+          width={11}
+          height={11}
+          className="ml-1.5 relative top-[2px]"
         />
-
-        <span className="font-semibold text-white">
-          {time}
-        </span>
       </div>
 
       {/* Icons */}
@@ -50,24 +48,24 @@ export default function IOSStatusBar() {
         <Image
           src="/cellular.svg"
           alt="Cellular"
-          width={17}
-          height={10}
+          width={20}
+          height={12}
           priority
         />
 
         <Image
           src="/wifi.svg"
           alt="WiFi"
-          width={15}
-          height={11}
+          width={18}
+          height={14}
           priority
         />
 
         <Image
           src="/battery.svg"
           alt="Battery"
-          width={24}
-          height={11}
+          width={27}
+          height={13}
           priority
         />
 
