@@ -14,6 +14,7 @@ import IOSSafari from "@/components/ios/ios-safari"
 import { LayoutGroup } from "framer-motion"
 import IOSNotes from "./ios-notes"
 import Wordle from "./wordle"
+import { IOSProfileWidget } from "./ios-profile-widget";
 
 export default function IOSHome() {
   const [activeApp, setActiveApp] = useState<string | null>(null)
@@ -54,10 +55,13 @@ export default function IOSHome() {
         }}
       >
         <IOSStatusBar />
+
         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-9 rounded-full bg-black z-50" />
 
         <div className="px-8 pt-24">
-
+          <div className="-mt-4 mb-4">
+            <IOSProfileWidget />
+          </div>
           <div className="grid grid-cols-2 gap-y-10 gap-x-6">
 
             {apps.map((app) => (
