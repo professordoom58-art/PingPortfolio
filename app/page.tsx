@@ -16,24 +16,24 @@ export default function Home() {
   const [screenBrightness, setScreenBrightness] = useState(90)
   const [isMobile, setIsMobile] = useState(false)
 
-// Simulate boot sequence
-useEffect(() => {
-  if (systemState === "booting") {
-    const timer = setTimeout(() => {
-      setSystemState(isMobile ? "desktop" : "login")
-    }, 3000)
+  // Simulate boot sequence
+  useEffect(() => {
+    if (systemState === "booting") {
+      const timer = setTimeout(() => {
+        setSystemState(isMobile ? "desktop" : "login")
+      }, 3000)
 
-    return () => clearTimeout(timer)
-  }
+      return () => clearTimeout(timer)
+    }
 
-  if (systemState === "restarting") {
-    const bootTimer = setTimeout(() => {
-      setSystemState(isMobile ? "desktop" : "login")
-    }, 3000)
+    if (systemState === "restarting") {
+      const bootTimer = setTimeout(() => {
+        setSystemState(isMobile ? "desktop" : "login")
+      }, 3000)
 
-    return () => clearTimeout(bootTimer)
-  }
-}, [systemState, isMobile])
+      return () => clearTimeout(bootTimer)
+    }
+  }, [systemState, isMobile])
 
   // Load settings from localStorage
   useEffect(() => {
@@ -48,14 +48,14 @@ useEffect(() => {
     }
   }, [])
 
-const handleLogin = () => {
-  if (isMobile) {
-    setSystemState("desktop")
-    return
-  }
+  const handleLogin = () => {
+    if (isMobile) {
+      setSystemState("desktop")
+      return
+    }
 
-  setSystemState("desktop")
-}
+    setSystemState("desktop")
+  }
 
   const handleLogout = () => {
     setSystemState("login")
@@ -141,8 +141,8 @@ const handleLogin = () => {
     }
   }
 
-  return (
-    <div className="relative">
+return (
+    <div className="relative h-screen w-screen overflow-hidden">
       {renderScreen()}
 
       {/* Brightness overlay - apply to all screens */}

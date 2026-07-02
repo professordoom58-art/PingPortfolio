@@ -10,6 +10,7 @@ import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
 import Photoshop from "@/components/apps/photoshop"
 import Illustrator from "@/components/apps/illustrator"
+import IOSSafari from "@/components/ios/ios-safari"
 import { LayoutGroup } from "framer-motion"
 import IOSNotes from "./ios-notes"
 import Wordle from "./wordle"
@@ -44,7 +45,7 @@ export default function IOSHome() {
   return (
     <LayoutGroup>
       <div
-        className="relative h-screen w-screen overflow-hidden bg-cover bg-center"
+        className="relative h-full w-full overflow-hidden bg-cover bg-center"
         style={{
           backgroundImage: "url('/bg1.png')",
           backgroundSize: "cover",
@@ -74,6 +75,7 @@ export default function IOSHome() {
         </div>
 
         <IOSDock
+          onSafariClick={() => setActiveApp("safari")}
           onMailClick={() =>
             window.location.href =
             "mailto:pingmihir@outlook.com?subject=Portfolio Inquiry"
@@ -86,6 +88,7 @@ export default function IOSHome() {
             layoutId="premiere"
             title=""
             showAppChrome={false}
+            backgroundClassName="bg-black"
             onBack={() => setActiveApp(null)}
           >
             <PremierePro
@@ -96,11 +99,23 @@ export default function IOSHome() {
           </IOSApp>
         )}
 
+        {activeApp === "safari" && (
+          <IOSApp
+            layoutId="safari"
+            title=""
+            showAppChrome={false}
+            onBack={() => setActiveApp(null)}
+          >
+            <IOSSafari onBack={() => setActiveApp(null)} />
+          </IOSApp>
+        )}
+
         {activeApp === "illustrator" && (
           <IOSApp
             layoutId="illustrator"
             title=""
             showAppChrome={false}
+            backgroundClassName="bg-black"
             onBack={() => setActiveApp(null)}
           >
             <Illustrator
@@ -117,6 +132,7 @@ export default function IOSHome() {
             layoutId="aftereffects"
             title=""
             showAppChrome={false}
+            backgroundClassName="bg-black"
             onBack={() => setActiveApp(null)}
           >
             <AfterEffects
@@ -131,6 +147,7 @@ export default function IOSHome() {
             layoutId="photoshop"
             title=""
             showAppChrome={false}
+            backgroundClassName="bg-black"
             onBack={() => setActiveApp(null)}
           >
             <Photoshop

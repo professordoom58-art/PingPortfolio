@@ -46,9 +46,15 @@ export default function AfterEffects({
 
   return (
     <div
-      className={`h-full flex flex-col ${isDarkMode ? "bg-zinc-900 text-white" : "bg-white text-black"
-        }`}
+      className={[
+        isMobile && "relative",
+        "h-full flex flex-col",
+        isDarkMode ? "bg-black text-white" : "bg-white text-black",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
+
       {!hideAdobeHeader && (
         <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
@@ -120,7 +126,7 @@ export default function AfterEffects({
           )}
 
           <div
-            className={`flex items-center ${isMobile ? "gap-4 mb-6" : "gap-4 mb-8"
+            className={`flex items-center ${isMobile ? "gap-4 mb-6 mt-4" : "gap-4 mb-8"
               }`}
           >
             <Image

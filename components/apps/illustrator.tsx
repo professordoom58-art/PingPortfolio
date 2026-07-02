@@ -27,7 +27,7 @@ export default function Illustrator({
 
 
   return (
-    <div className={`h-full flex flex-col ${isDarkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
+    <div className={`h-full flex flex-col ${isDarkMode ? "bg-black text-white" : "bg-white text-black"}`}>
       {!hideAdobeHeader && (
         <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
@@ -84,7 +84,7 @@ export default function Illustrator({
           )}
 
           <div
-            className={`flex items-center ${isMobile ? "gap-3 mb-6" : "gap-4 mb-8"
+            className={`flex items-center ${isMobile ? "gap-3 mb-6 mt-4" : "gap-4 mb-8"
               }`}
           >
             <Image
@@ -237,7 +237,7 @@ export default function Illustrator({
               onClick={() => setSelectedImage(null)}
             >
               <div
-                className={`relative bg-zinc-900 ${isMobile
+                className={`relative bg-black ${isMobile
                   ? "w-[94vw] max-w-none rounded-3xl p-4"
                   : "max-w-6xl w-full rounded-2xl p-6"
                   }`}

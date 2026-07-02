@@ -11,6 +11,7 @@ interface IOSAppProps {
     layoutId: string
     showTitle?: boolean
     showAppChrome?: boolean
+    backgroundClassName?: string
 }
 
 export default function IOSApp({

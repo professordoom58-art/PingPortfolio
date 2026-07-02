@@ -4,15 +4,14 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 
 interface IOSDockProps {
+  onSafariClick: () => void
   onMailClick: () => void
   onNotesClick: () => void
   onWordleClick: () => void
 }
 
-const dockIconClass =
-  "h-[60px] w-[60px] select-none object-contain transition-transform"
-
 export default function IOSDock({
+  onSafariClick,
   onMailClick,
   onNotesClick,
   onWordleClick,
@@ -20,15 +19,17 @@ export default function IOSDock({
   const dockApps = [
     {
       id: "safari",
+      layoutId: "safari",
       icon: "/safari.png",
       alt: "Safari",
-      scale: 1.1,
+      scale: 1.34,
+      onClick: onSafariClick,
     },
     {
       id: "mail",
       icon: "/mail.png",
       alt: "Mail",
-      scale: 1.04,
+      scale: 1.27,
       onClick: onMailClick,
     },
     {
@@ -36,7 +37,7 @@ export default function IOSDock({
       layoutId: "notes",
       icon: "/notes.png",
       alt: "Notes",
-      scale: 0.93,
+      scale: 1.15,
       onClick: onNotesClick,
     },
     {
@@ -44,10 +45,13 @@ export default function IOSDock({
       layoutId: "wordle",
       icon: "/wordle.png",
       alt: "Wordle",
-      scale: 0.91,
+      scale: 1.11,
       onClick: onWordleClick,
     },
   ]
+
+  const dockIconClass =
+    "h-[60px] w-[60px] select-none object-contain transition-transform"
 
   return (
     <div className="absolute bottom-7 left-1/2 -translate-x-1/2 z-40">

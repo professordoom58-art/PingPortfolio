@@ -40,7 +40,7 @@ export default function PremierePro({
   return (
     <div
       className={`h-full flex flex-col ${isDarkMode
-        ? "bg-zinc-900 text-white"
+        ? "bg-black text-white"
         : "bg-white text-black"
         }`}
     >
@@ -134,7 +134,7 @@ export default function PremierePro({
           {/* Hero */}
 
           <div
-            className={`flex items-center ${isMobile ? "gap-4 mb-6" : "gap-4 mb-8"
+            className={`flex items-center ${isMobile ? "gap-4 mb-6 mt-4" : "gap-4 mb-8"
               }`}
           >
 
@@ -282,7 +282,7 @@ export default function PremierePro({
 
                     </div>
 
-                    <div className="h-3 rounded-full bg-zinc-900 overflow-hidden">
+                    <div className="h-3 rounded-full bg-black overflow-hidden">
 
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-purple-700 via-fuchsia-500 to-violet-400"
@@ -423,7 +423,7 @@ export default function PremierePro({
                         {track.label}
                       </span>
 
-                      <div className="flex-1 h-8 bg-zinc-900 rounded overflow-hidden relative">
+                      <div className="flex-1 h-8 bg-black rounded overflow-hidden relative">
 
                         <div
                           className="h-full rounded bg-gradient-to-r from-purple-700 via-fuchsia-500 to-violet-400"
