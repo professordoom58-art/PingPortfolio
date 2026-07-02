@@ -30,7 +30,7 @@ const NOTES: Note[] = [
     {
         id: "portfolio",
         title: "Portfolio",
-        date: "1 July 2026",
+        date: "01/06/2026",
         month: "Today",
         body: `Hi, I'm Mihir.
 
@@ -60,7 +60,7 @@ pingmihir@outlook.com`,
     {
         id: "adobe",
         title: "Adobe Projects",
-        date: "29 June 2026",
+        date: "29/06/2026",
         month: "June",
         body: `Premiere Pro
 
@@ -76,7 +76,7 @@ Figma`,
     {
         id: "youtube",
         title: "YouTube Ideas",
-        date: "17 June 2026",
+        date: "17/06/2026",
         month: "June",
         body: `Celebrity Culture
 
@@ -92,7 +92,7 @@ Artificial Intelligence`,
     {
         id: "motion",
         title: "Motion Graphics",
-        date: "8 May 2026",
+        date: "08/05/2026",
         month: "May",
         body: `Apple UI
 
@@ -108,7 +108,7 @@ Documentary Graphics`,
     {
         id: "freelance",
         title: "Freelance Checklist",
-        date: "26 April 2026",
+        date: "26/04/2026",
         month: "April",
         body: `Portfolio
 
@@ -270,7 +270,7 @@ duration-200
     to-transparent
   "
             />
-            <AnimatePresence mode="wait">
+            <AnimatePresence initial={false}>
 
 
                 {/* ===========================
@@ -286,12 +286,10 @@ duration-200
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -40, opacity: 0 }}
                         transition={{
-                            type: "spring",
-                            stiffness: 380,
-                            damping: 36,
-                            mass: 0.9,
+                            duration: 0.22,
+                            ease: [0.32, 0.72, 0, 1],
                         }}
-                        className="absolute inset-0 overflow-y-auto pt-28 pb-24"
+                        className="absolute inset-0 overflow-y-auto pt-32 pb-24"
                     >
 
                         {/* Search */}
@@ -303,34 +301,6 @@ duration-200
                             <p className="mt-1 text-[13px] text-zinc-500">
                                 {filteredNotes.length} Notes
                             </p>
-                        </div>
-                        <div className="px-5 pt-5 pb-4">
-
-                            <div
-                                className="flex items-center gap-3 h-11 rounded-full bg-[#1c1c1e] px-4"
-                            >
-                                <Search
-                                    size={18}
-                                    className="text-zinc-500"
-                                />
-
-                                <input
-                                    value={search}
-                                    onChange={(e) =>
-                                        setSearch(e.target.value)
-                                    }
-                                    placeholder="Search"
-                                    className="
-                    flex-1
-                    bg-transparent
-                    outline-none
-                    text-white
-                    placeholder:text-zinc-500
-                  "
-                                />
-
-                            </div>
-
                         </div>
 
                         {/* Notes */}
@@ -374,15 +344,14 @@ duration-200
                                             {monthNotes.map(
                                                 (note, index) => (
 
-                                                    <button
+                                                    <motion.button
                                                         key={note.id}
-                                                        onClick={() =>
-                                                            setSelectedNote(note)
-                                                        }
+                                                        whileTap={{ scale: 0.985 }}
+                                                        onClick={() => setSelectedNote(note)}
                                                         className={`
                               w-full
                               px-5
-                              py-4
+                              py-3
                               text-left
                               active:bg-[#2c2c2e]
                               transition-colors
@@ -406,7 +375,8 @@ duration-200
 
                                                         <div
                                                             className="
-                              mt-1
+                              mt-0.5
+                            
                               flex
                               gap-2
                               text-[15px]
@@ -432,7 +402,7 @@ duration-200
 
                                                         </div>
 
-                                                    </button>
+                                                    </motion.button>
 
                                                 )
                                             )}
@@ -452,19 +422,13 @@ duration-200
 
                     <motion.div
                         key="note"
-                        initial={{
-                            x: "100%",
-                        }}
-                        animate={{
-                            x: 0,
-                        }}
-                        exit={{
-                            x: "100%",
-                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         transition={{
                             type: "spring",
-                            stiffness: 380,
-                            damping: 36,
+                            stiffness: 5000,
+                            damping: 42,
                             mass: 0.9,
                         }}
                         className="
@@ -472,7 +436,7 @@ duration-200
     inset-0
     overflow-y-auto
     px-6
-    pt-28
+    pt-32
     pb-24
 "
                     >
@@ -481,11 +445,9 @@ duration-200
 
                         <div
                             className="
-              flex-1
-              overflow-y-auto
-              px-6
-              pb-28
-            "
+        px-6
+        pb-28
+    "
                         >
 
                             <p
@@ -526,53 +488,7 @@ duration-200
                 )}
 
             </AnimatePresence>
-            {/* Bottom Toolbar */}
 
-            <div
-                className="
-              absolute
-              bottom-0
-              left-0
-              right-0
-              h-20
-              px-6
-              pb-6
-              flex
-              items-end
-              justify-between
-              bg-gradient-to-t
-              from-black
-              to-transparent
-            "
-            >
-                <div
-                    className="
-                flex
-                items-center
-                gap-8
-                text-[#FFD60A]
-              "
-                >
-                    <CheckCircle2 size={21} />
-
-                    <Paperclip size={21} />
-
-                    <PenLine size={21} />
-
-                    <Share size={21} />
-                </div>
-
-                <motion.button
-                    className="
-                text-[#FFD60A]
-                active:scale-90
-                transition-transform
-              "
-                >
-                    <Ellipsis size={22} />
-                </motion.button>
-            </div>
-
-        </div>
+        </div >
     )
 }

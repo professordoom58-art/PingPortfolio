@@ -2,17 +2,20 @@
 
 import Image from "next/image"
 import { Video, FolderOpen, Clock, Mail } from "lucide-react"
+import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface PremiereProProps {
   isDarkMode?: boolean
   isMobile?: boolean
   hideAdobeHeader?: boolean
+  onBack?: () => void
 }
 
 export default function PremierePro({
   isDarkMode = true,
   isMobile = false,
   hideAdobeHeader = false,
+  onBack,
 }: PremiereProProps) {
   const borderClass = isDarkMode
     ? "border-zinc-700"
@@ -118,10 +121,15 @@ export default function PremierePro({
 
         <div
           className={`flex-1 overflow-auto ${isMobile
-            ? "px-6 py-6"
+            ? "px-6 pt-28 pb-6"
             : "p-8"
             }`}
         >
+          {isMobile && onBack && (
+            <div className="fixed top-14 left-6 z-50">
+              <IOSBackButton onClick={onBack} />
+            </div>
+          )}
 
           {/* Hero */}
 

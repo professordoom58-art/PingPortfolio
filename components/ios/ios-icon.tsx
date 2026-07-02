@@ -1,7 +1,6 @@
 "use client"
 
-import Image from "next/image"
-import { motion } from "framer-motion"
+import AppIcon from "./app-icon"
 
 interface IOSIconProps {
     icon: string
@@ -17,29 +16,18 @@ export default function IOSIcon({
     layoutId,
 }: IOSIconProps) {
     return (
-        <motion.button
+    <div className="flex flex-col items-center">
+        <AppIcon
+            icon={icon}
+            alt={title}
             layoutId={layoutId}
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.03 }}
-            transition={{
-                type: "spring",
-                stiffness: 420,
-                damping: 32,
-            }}
+            size={80}
             onClick={onClick}
-            className="flex flex-col items-center"
-        >
-            <div className="relative w-20 h-20 rounded-[22px] overflow-hidden">
-                <Image
-                    src={icon}
-                    alt={title}
-                    fill
-                    className="object-cover"
-                />
-            </div>
-            <span className="mt-2.5 text-[15px] font-medium text-white text-center leading-none">
-                {title}
-            </span>
-        </motion.button>
-    )
+        />
+
+        <span className="mt-2.5 text-[15px] font-medium text-white text-center leading-none">
+            {title}
+        </span>
+    </div>
+)
 }

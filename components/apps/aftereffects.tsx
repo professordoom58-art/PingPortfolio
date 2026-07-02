@@ -2,17 +2,20 @@
 
 import Image from "next/image"
 import { Sparkles, Layers, Wand2, Mail } from "lucide-react"
+import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface AfterEffectsProps {
   isDarkMode?: boolean
   isMobile?: boolean
   hideAdobeHeader?: boolean
+  onBack?: () => void
 }
 
 export default function AfterEffects({
   isDarkMode = true,
   isMobile = false,
   hideAdobeHeader = false,
+  onBack,
 }: AfterEffectsProps) {
   const borderClass = isDarkMode ? "border-zinc-700" : "border-gray-200"
   const hoverClass = isDarkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"
@@ -107,9 +110,15 @@ export default function AfterEffects({
         )}
         {/* Main Content */}
         <div
-          className={`flex-1 overflow-auto ${isMobile ? "px-6 py-6" : "p-8"
+          className={`flex-1 overflow-auto ${isMobile ? "px-6 pt-28 pb-6" : "p-8"
             }`}
         >
+          {isMobile && onBack && (
+            <div className="fixed top-14 left-6 z-50">
+              <IOSBackButton onClick={onBack} />
+            </div>
+          )}
+
           <div
             className={`flex items-center ${isMobile ? "gap-4 mb-6" : "gap-4 mb-8"
               }`}

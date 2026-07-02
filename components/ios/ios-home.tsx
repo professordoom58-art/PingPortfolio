@@ -12,6 +12,7 @@ import Photoshop from "@/components/apps/photoshop"
 import Illustrator from "@/components/apps/illustrator"
 import { LayoutGroup } from "framer-motion"
 import IOSNotes from "./ios-notes"
+import Wordle from "./wordle"
 
 export default function IOSHome() {
   const [activeApp, setActiveApp] = useState<string | null>(null)
@@ -78,16 +79,19 @@ export default function IOSHome() {
             "mailto:pingmihir@outlook.com?subject=Portfolio Inquiry"
           }
           onNotesClick={() => setActiveApp("notes")}
+          onWordleClick={() => setActiveApp("wordle")}
         />
         {activeApp === "premiere" && (
           <IOSApp
             layoutId="premiere"
-            title="Premiere Pro"
+            title=""
+            showAppChrome={false}
             onBack={() => setActiveApp(null)}
           >
             <PremierePro
               isMobile
               hideAdobeHeader
+              onBack={() => setActiveApp(null)}
             />
           </IOSApp>
         )}
@@ -95,12 +99,14 @@ export default function IOSHome() {
         {activeApp === "illustrator" && (
           <IOSApp
             layoutId="illustrator"
-            title="Illustrator"
+            title=""
+            showAppChrome={false}
             onBack={() => setActiveApp(null)}
           >
             <Illustrator
               isMobile
               hideAdobeHeader
+              onBack={() => setActiveApp(null)}
             />
 
 
@@ -109,24 +115,28 @@ export default function IOSHome() {
         {activeApp === "aftereffects" && (
           <IOSApp
             layoutId="aftereffects"
-            title="After Effects"
+            title=""
+            showAppChrome={false}
             onBack={() => setActiveApp(null)}
           >
             <AfterEffects
               isMobile
               hideAdobeHeader
+              onBack={() => setActiveApp(null)}
             />
           </IOSApp>
         )}
         {activeApp === "photoshop" && (
           <IOSApp
             layoutId="photoshop"
-            title="Photoshop"
+            title=""
+            showAppChrome={false}
             onBack={() => setActiveApp(null)}
           >
             <Photoshop
               isMobile
               hideAdobeHeader
+              onBack={() => setActiveApp(null)}
             />
           </IOSApp>
         )}
@@ -141,6 +151,16 @@ export default function IOSHome() {
               isMobile
               onBack={() => setActiveApp(null)}
             />
+          </IOSApp>
+        )}
+        {activeApp === "wordle" && (
+          <IOSApp
+            layoutId="wordle"
+            title=""
+            showAppChrome={false}
+            onBack={() => setActiveApp(null)}
+          >
+            <Wordle onBack={() => setActiveApp(null)} />
           </IOSApp>
         )}
       </div>

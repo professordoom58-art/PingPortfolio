@@ -3,17 +3,20 @@
 import Image from "next/image"
 import { useState } from "react"
 import { ImageIcon, Brush, Layers, Sparkles, Mail } from "lucide-react"
+import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface PhotoshopProps {
   isDarkMode?: boolean
   isMobile?: boolean
   hideAdobeHeader?: boolean
+  onBack?: () => void
 }
 
 export default function Photoshop({
   isDarkMode = true,
   isMobile = false,
   hideAdobeHeader = false,
+  onBack,
 }: PhotoshopProps) {
   const borderClass = isDarkMode ? "border-zinc-700" : "border-gray-200"
   const hoverClass = isDarkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"
@@ -69,7 +72,16 @@ export default function Photoshop({
           </div>
         )}
 
-        <div className="flex-1 p-8 overflow-auto">
+        <div
+          className={`flex-1 overflow-auto ${isMobile ? "px-6 pt-28 pb-6" : "p-8"
+            }`}
+        >
+          {isMobile && onBack && (
+            <div className="fixed top-14 left-6 z-50">
+              <IOSBackButton onClick={onBack} />
+            </div>
+          )}
+
           <div
             className={`flex items-center ${isMobile ? "gap-3 mb-6" : "gap-4 mb-8"
               }`}
