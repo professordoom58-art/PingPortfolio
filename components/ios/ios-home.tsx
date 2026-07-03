@@ -48,7 +48,7 @@ export default function IOSHome() {
       <div
         className="relative h-full w-full overflow-hidden bg-cover bg-center"
         style={{
-          backgroundImage: "url('/bg1.png')",
+          backgroundImage: "url('/bg1.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -56,13 +56,13 @@ export default function IOSHome() {
       >
         <IOSStatusBar />
 
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-9 rounded-full bg-black z-50" />
+   
 
         <div className="px-8 pt-24">
           <div className="-mt-4 mb-4">
             <IOSProfileWidget />
           </div>
-          <div className="grid grid-cols-2 gap-y-10 gap-x-6">
+          <div className="grid grid-cols-2 gap-y-7 gap-x-6">
 
             {apps.map((app) => (
               <IOSIcon

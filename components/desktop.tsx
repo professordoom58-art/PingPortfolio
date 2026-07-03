@@ -11,6 +11,7 @@ import Launchpad from "@/components/launchpad"
 import ControlCenter from "@/components/control-center"
 import Spotlight from "@/components/spotlight"
 import type { AppWindow } from "@/types"
+import { IOSProfileWidget } from "@/components/ios/ios-profile-widget";
 
 interface DesktopProps {
   onLogout: () => void
@@ -151,6 +152,11 @@ export default function Desktop({
           isDarkMode={isDarkMode}
           activeWindow={activeWindowId ? openWindows.find((w) => w.id === activeWindowId) || null : null}
         />
+
+        {/* Desktop Widget */}
+        <div className="absolute top-10 left-6 z-10">
+          <IOSProfileWidget desktop />
+        </div>
 
         {/* Windows */}
         <div className="absolute inset-0 pt-6 pb-16">
