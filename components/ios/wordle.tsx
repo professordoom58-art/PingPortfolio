@@ -52,8 +52,9 @@ const WORDS: string[] = [
   "learn", "lease", "least", "leave", "legal", "level", "light", "limit",
   "liver", "local", "logic", "loose", "lower", "loyal", "lucky", "lunch",
   "lying", "magic", "major", "maker", "march", "match", "maybe", "meant",
-  "medal", "media", "metal", "meter", "might", "minor", "minus", "mixed",
-  "model", "money", "month", "moral", "motor", "mount", "mouse", "mouth",
+  "medal", "media", "metal", "meter", "might", "minor", "minus", "mihir",
+  "mixed", "model", "money", "month", "moral", "motor", "mount", "mouse",
+  "mouth", "video", "kanye", "drake", "nathu", "alpha",
   "moved", "movie", "music", "needs", "never", "newly", "night", "noise",
   "north", "noted", "novel", "nurse", "occur", "ocean", "offer", "often",
   "order", "other", "ought", "outer", "owner", "paint", "panel", "paper",
@@ -368,7 +369,7 @@ function ResultCard({ status, answer, attempts, onNewGame }: ResultCardProps) {
           {won
             ? `You guessed the word in ${attempts} ${attempts === 1 ? "try" : "tries"
             }.`
-            : "The word was - ."}
+            : "The word was"}
         </p>
         {!won && (
           <div className="mb-5 flex items-center justify-center gap-1.5">
@@ -406,8 +407,8 @@ interface WordleProps {
 
 type LoveBurst = {
   id: number;
-  x: number;
-  y: number;
+  left: number;
+  top: number;
   rotate: number;
   scale: number;
   delay: number;
@@ -557,20 +558,19 @@ export default function Wordle({ onBack }: WordleProps) {
 
   const showerLove = useCallback(() => {
     const now = Date.now();
-    const nextBursts = Array.from({ length: 12 }, (_, index) => {
-      const spread = (index - 5.5) * 8 + (Math.random() - 0.5) * 12;
 
-      return {
-        id: now + index,
-        x: spread,
-        y: -34 - Math.random() * 62,
-        rotate: -26 + Math.random() * 52,
-        scale: 0.75 + Math.random() * 0.45,
-        delay: index * 0.018,
-      };
-    });
+    const nextBursts = Array.from({ length: 40 }, (_, index) => ({
+      id: now + index,
 
-    setLoveBursts((prev) => [...prev.slice(-24), ...nextBursts]);
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+
+      rotate: -40 + Math.random() * 80,
+      scale: 0.75 + Math.random() * 0.6,
+      delay: Math.random() * 0.4,
+    }));
+
+    setLoveBursts((prev) => [...prev.slice(-80), ...nextBursts]);
   }, []);
 
   useEffect(() => {
@@ -602,6 +602,52 @@ export default function Wordle({ onBack }: WordleProps) {
 
   return (
     <div className="relative w-full h-full flex flex-col bg-black overflow-hidden">
+      <AnimatePresence>
+        {loveBursts.map((burst) => (
+          <motion.span
+            key={burst.id}
+            className="pointer-events-none absolute z-0 text-[#ff375f]"
+            style={{
+              left: `${burst.left}vw`,
+              top: `${burst.top}vh`,
+            }}
+            initial={{
+              opacity: 0,
+              x: 0,
+              y: 0,
+              scale: 0.2,
+              rotate: burst.rotate,
+            }}
+
+            animate={{
+              opacity: [0, 1, 1, 0],
+
+              x: (Math.random() - 0.5) * 180,
+
+              y: -80 - Math.random() * 160,
+
+              scale: burst.scale,
+
+              rotate: burst.rotate,
+            }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.86,
+              delay: burst.delay,
+              ease: [0.16, 1, 0.3, 1],
+              times: [0, 0.18, 0.68, 1],
+            }}
+            onAnimationComplete={() => {
+              setLoveBursts((prev) =>
+                prev.filter((item) => item.id !== burst.id)
+              );
+            }}
+          >
+            <Heart size={16 + Math.random() * 8} strokeWidth={2.4} fill="currentColor" />
+          </motion.span>
+        ))}
+      </AnimatePresence>
+
       {onBack && (
         <div className="absolute top-14 left-5 z-50">
           <button
@@ -636,42 +682,6 @@ duration-200
       )}
 
       <div className="absolute top-14 right-5 z-50">
-        <AnimatePresence>
-          {loveBursts.map((burst) => (
-            <motion.span
-              key={burst.id}
-              className="pointer-events-none absolute left-1/2 top-1/2 z-0 text-[#ff375f]"
-              initial={{
-                opacity: 0,
-                x: -6,
-                y: -6,
-                scale: 0.35,
-                rotate: 0,
-              }}
-              animate={{
-                opacity: [0, 1, 1, 0],
-                x: burst.x - 6,
-                y: burst.y - 6,
-                scale: burst.scale,
-                rotate: burst.rotate,
-              }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.86,
-                delay: burst.delay,
-                ease: [0.16, 1, 0.3, 1],
-                times: [0, 0.18, 0.68, 1],
-              }}
-              onAnimationComplete={() => {
-                setLoveBursts((prev) =>
-                  prev.filter((item) => item.id !== burst.id)
-                );
-              }}
-            >
-              <Heart size={12} strokeWidth={2.4} fill="currentColor" />
-            </motion.span>
-          ))}
-        </AnimatePresence>
 
         <motion.button
           type="button"
