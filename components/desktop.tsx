@@ -12,7 +12,6 @@ import ControlCenter from "@/components/control-center"
 import Spotlight from "@/components/spotlight"
 import type { AppWindow } from "@/types"
 import { IOSProfileWidget } from "@/components/ios/ios-profile-widget";
-
 interface DesktopProps {
   onLogout: () => void
   onSleep: () => void

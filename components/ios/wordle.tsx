@@ -233,30 +233,30 @@ const Tile = React.memo(function Tile({
         shake
           ? { x: [0, -8, 8, -8, 8, -4, 4, 0] }
           : bounce
-          ? { y: [0, -15, 2, 0] }
-          : flip
-          ? { rotateX: [0, 90, 0] }
-          : pop
-          ? { scale: [0.85, 1.06, 1] }
-          : { scale: 1, rotateX: 0, y: 0 }
+            ? { y: [0, -15, 2, 0] }
+            : flip
+              ? { rotateX: [0, 90, 0] }
+              : pop
+                ? { scale: [0.85, 1.06, 1] }
+                : { scale: 1, rotateX: 0, y: 0 }
       }
       transition={
         shake
           ? { duration: 0.42, ease: [0.36, 0, 0.66, 1] }
           : bounce
-          ? {
+            ? {
               duration: 0.5,
               ease: [0.16, 1, 0.3, 1],
               delay: bounceDelay,
             }
-          : flip
-          ? {
-              duration: 0.55,
-              ease: "easeInOut",
-              delay: flipDelay,
-              times: [0, 0.5, 1],
-            }
-          : { duration: 0.14, ease: [0.16, 1, 0.3, 1] }
+            : flip
+              ? {
+                duration: 0.55,
+                ease: "easeInOut",
+                delay: flipDelay,
+                times: [0, 0.5, 1],
+              }
+              : { duration: 0.14, ease: [0.16, 1, 0.3, 1] }
       }
     >
       {letter}
@@ -366,10 +366,9 @@ function ResultCard({ status, answer, attempts, onNewGame }: ResultCardProps) {
         </h2>
         <p className="text-white/[0.65] text-[14px] leading-snug mb-5">
           {won
-            ? `You guessed the word in ${attempts} ${
-                attempts === 1 ? "try" : "tries"
-              }.`
-            : "You guessed the word."}
+            ? `You guessed the word in ${attempts} ${attempts === 1 ? "try" : "tries"
+            }.`
+            : "The word was - ."}
         </p>
         {!won && (
           <div className="mb-5 flex items-center justify-center gap-1.5">
@@ -430,7 +429,7 @@ export default function Wordle({ onBack }: WordleProps) {
   const [showResult, setShowResult] = useState(false);
   const [popTileIndex, setPopTileIndex] = useState<number | null>(null);
   const [loveBursts, setLoveBursts] = useState<LoveBurst[]>([]);
-
+  const [toast, setToast] = useState("");
   const busyTimeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const clearTimers = useCallback(() => {
@@ -469,6 +468,16 @@ export default function Wordle({ onBack }: WordleProps) {
     if (isBusy || gameStatus !== "playing") return;
     if (currentGuess.length !== WORD_LENGTH) {
       triggerShake(guesses.length);
+      return;
+    }
+    if (!WORDS.includes(currentGuess.toLowerCase())) {
+      setToast("Word is not valid");
+      triggerShake(guesses.length);
+
+      setTimeout(() => {
+        setToast("");
+      }, 1500);
+
       return;
     }
     const rowIndex = guesses.length;
@@ -582,9 +591,8 @@ export default function Wordle({ onBack }: WordleProps) {
   const attemptsRemaining = MAX_ATTEMPTS - guesses.length;
 
   const statusLabel = useMemo(() => {
-    return `${attemptsRemaining} ${
-      attemptsRemaining === 1 ? "attempt" : "attempts"
-    } remaining`;
+    return `${attemptsRemaining} ${attemptsRemaining === 1 ? "attempt" : "attempts"
+      } remaining`;
   }, [attemptsRemaining]);
 
   const rows = useMemo(
@@ -721,8 +729,8 @@ duration-200
               gameStatus === "won"
                 ? "text-[#34C759]"
                 : gameStatus === "lost"
-                ? "text-[#FF453A]"
-                : "text-white/50",
+                  ? "text-[#FF453A]"
+                  : "text-white/50",
             ].join(" ")}
           >
             {statusLabel}
@@ -739,10 +747,10 @@ duration-200
             const rowLetters = isSubmitted
               ? guesses[rowIndex].split("")
               : isCurrent
-              ? currentGuess
+                ? currentGuess
                   .padEnd(WORD_LENGTH, " ")
                   .split("")
-              : Array(WORD_LENGTH).fill(" ");
+                : Array(WORD_LENGTH).fill(" ");
             const rowEval = isSubmitted ? evaluations[rowIndex] : null;
 
             return (
@@ -773,9 +781,26 @@ duration-200
           })}
         </div>
       </div>
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.18 }}
+            className="flex justify-center mb-3"
+          >
+            <div className="rounded-lg bg-white px-5 py-3 shadow-xl">
+              <p className="text-sm font-semibold text-black">
+                {toast}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Keyboard */}
-      <div className="shrink-0 px-2 pb-[calc(env(safe-area-inset-bottom)+16px)] pt-2">
+      <div className="relative shrink-0 px-2 pb-[calc(env(safe-area-inset-bottom)+16px)] pt-2">
         <div className="flex flex-col gap-2">
           {KEYBOARD_ROWS.map((row, i) => (
             <div key={i} className="flex gap-1.5 px-1">

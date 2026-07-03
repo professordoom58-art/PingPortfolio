@@ -55,7 +55,7 @@ export default function LoginScreen({
   });
 
   // Choose wallpaper based on dark/light mode
-  const wallpaper = isDarkMode ? "/wallp.png" : "/wallp.png";
+  const wallpaper = isDarkMode ? "/wallpaper-night.jpg" : "/wallpaper-day.jpg";
 
   return (
     <div
