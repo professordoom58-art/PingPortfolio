@@ -8,25 +8,21 @@ import { AppleIcon } from "@/components/icons"
 
 interface MenubarProps {
   time: Date
-  onLogout: () => void
   onSleep: () => void
   onShutdown: () => void
   onRestart: () => void
   onSpotlightClick: () => void
   onControlCenterClick: () => void
-  isDarkMode: boolean
   activeWindow: { id: string; title: string } | null
 }
 
 export default function Menubar({
   time,
-  onLogout,
   onSleep,
   onShutdown,
   onRestart,
   onSpotlightClick,
   onControlCenterClick,
-  isDarkMode,
   activeWindow,
 }: MenubarProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
@@ -116,15 +112,15 @@ export default function Menubar({
     setShowWifiToggle(!showWifiToggle)
   }
 
-  const menuBgClass = isDarkMode ? "bg-black/40 backdrop-blur-md" : "bg-white/20 backdrop-blur-md"
-  const dropdownBgClass = isDarkMode ? "bg-gray-800/90 backdrop-blur-md" : "bg-gray-200/90 backdrop-blur-md"
-  const textClass = isDarkMode ? "text-white" : "text-gray-800"
-  const hoverClass = isDarkMode ? "hover:bg-blue-600" : "hover:bg-blue-400"
+  const menuBgClass = "bg-black/40 backdrop-blur-md"
+  const dropdownBgClass = "bg-gray-800/90 backdrop-blur-md"
+  const textClass = "text-white"
+  const hoverClass = "hover:bg-blue-600"
 
   return (
     <div
       ref={menuRef}
-      className={`fixed top-0 left-0 right-0 h-6 ${menuBgClass} z-50 flex items-center px-4 ${textClass} text-sm`}
+      className={`fixed top-0 left-0 right-0 h-6 ${menuBgClass} z-[1000] flex items-center px-4 ${textClass} text-sm`}
     >
       <div className="flex-1 flex items-center">
         <button
@@ -149,10 +145,6 @@ export default function Menubar({
             </button>
             <button className={`w-full text-left px-4 py-1 ${hoverClass}`} onClick={onShutdown}>
               Shut Down...
-            </button>
-            <div className="border-t border-gray-700 my-1"></div>
-            <button className={`w-full text-left px-4 py-1 ${hoverClass}`} onClick={onLogout}>
-              Log Out Mihir...
             </button>
           </div>
         )}
@@ -237,7 +229,7 @@ export default function Menubar({
             alt="Control Center"
             className="w-4 h-4"
             style={{
-              filter: isDarkMode ? "invert(1)" : "none",
+              filter: "invert(1)",
               opacity: 0.9,
             }}
           />

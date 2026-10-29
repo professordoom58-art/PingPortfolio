@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface WeatherProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
 }
 
 // Mock weather data for different cities
@@ -101,7 +101,7 @@ const weatherData = {
       { day: "Fri", temp: 17, condition: "partly-cloudy" },
     ],
   },
-}
+} as Record<string, { current: { temp: number; condition: string; humidity: number; windSpeed: number; sunrise: string; sunset: string; feelsLike: number }; forecast: { day: string; temp: number; condition: string }[] }>
 
 type WeatherCondition = "sunny" | "partly-cloudy" | "cloudy" | "rainy" | "snowy"
 
@@ -115,7 +115,7 @@ interface Particle {
   color: string
 }
 
-export default function Weather({ isDarkMode = true }: WeatherProps) {
+export default function Weather({}: WeatherProps) {
   const [city, setCity] = useState("New York")
   const [searchQuery, setSearchQuery] = useState("")
   const [weather, setWeather] = useState(weatherData["New York"])
@@ -124,10 +124,10 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
   const particles = useRef<Particle[]>([])
   const animationRef = useRef<number | null>(null)
   
-  const bgColor = isDarkMode ? "bg-gray-900" : "bg-gray-100"
-  const textColor = isDarkMode ? "text-white" : "text-gray-800"
-  const cardBg = isDarkMode ? "bg-gray-800" : "bg-white"
-  const borderColor = isDarkMode ? "border-gray-700" : "border-gray-200"
+  const bgColor = "bg-gray-900"
+  const textColor = "text-white"
+  const cardBg = "bg-gray-800"
+  const borderColor = "border-gray-700"
   
   // Initialize particles and animation
   useEffect(() => {
@@ -218,7 +218,7 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
           speedX: Math.random() * 1 - 0.5,
           speedY: Math.random() * 7 + 10,
           opacity: Math.random() * 0.5 + 0.5,
-          color: isDarkMode ? 'rgba(120, 160, 255, 0.8)' : 'rgba(0, 90, 190, 0.6)'
+          color: 'rgba(120, 160, 255, 0.8)'
         }
       } else if (condition === "snowy") {
         particle = {
@@ -238,9 +238,8 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
           speedX: (Math.random() - 0.5) * 0.5,
           speedY: (Math.random() - 0.5) * 0.5,
           opacity: Math.random() * 0.5 + 0.3,
-          color: isDarkMode ? 
-            `rgba(${255}, ${200 + Math.random() * 55}, ${0}, ${Math.random() * 0.5 + 0.3})` : 
-            `rgba(${255}, ${200 + Math.random() * 55}, ${0}, ${Math.random() * 0.7 + 0.3})`
+          color: 
+            `rgba(${255}, ${200 + Math.random() * 55}, ${0}, ${Math.random() * 0.5 + 0.3})`
         }
       } else {
         // Clouds
@@ -251,7 +250,7 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
           speedX: Math.random() * 0.2 - 0.1,
           speedY: 0,
           opacity: Math.random() * 0.2 + 0.1,
-          color: isDarkMode ? 'rgba(200, 200, 220, 0.3)' : 'rgba(255, 255, 255, 0.7)'
+          color: 'rgba(200, 200, 220, 0.3)'
         }
       }
       
@@ -349,7 +348,7 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
   }
   
   return (
-    <div className={`h-full ${bgColor} ${textColor} flex flex-col relative overflow-hidden`}>
+    <div className={`min-h-full ${bgColor} ${textColor} flex flex-col relative overflow-hidden`}>
       {/* Canvas for weather effects */}
       <canvas 
         ref={canvasRef} 
@@ -367,14 +366,14 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className={`pl-10 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}
+              className="pl-10 bg-gray-800 border-gray-700"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           </div>
           <Button 
             onClick={handleSearch}
-            variant={isDarkMode ? "outline" : "default"}
-            className={isDarkMode ? "border-gray-700" : ""}
+            variant="outline"
+            className="border-gray-700"
           >
             Search
           </Button>
@@ -454,7 +453,7 @@ export default function Weather({ isDarkMode = true }: WeatherProps) {
               <Button
                 key={cityName}
                 variant={city === cityName ? "default" : "outline"}
-                className={`${city === cityName ? "" : isDarkMode ? "border-gray-700" : "border-gray-300"}`}
+                className={`${city === cityName ? "" : "border-gray-700"}`}
                 onClick={() => setCity(cityName)}
               >
                 {cityName}

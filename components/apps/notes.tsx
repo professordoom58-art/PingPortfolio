@@ -5,10 +5,10 @@ import type React from "react"
 import { useState } from "react"
 
 interface NotesProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
 }
 
-export default function Notes({ isDarkMode = true }: NotesProps) {
+export default function Notes({}: NotesProps) {
   // Update the notes state with enhanced content
   const [notes, setNotes] = useState([
 {
@@ -130,15 +130,15 @@ Portfolio: Mihir Suthar | macOS Portfolio`,
     )
   }
 
-  const textColor = isDarkMode ? "text-white" : "text-gray-800"
-  const bgColor = isDarkMode ? "bg-gray-900" : "bg-white"
-  const sidebarBg = isDarkMode ? "bg-gray-800" : "bg-gray-100"
-  const borderColor = isDarkMode ? "border-gray-700" : "border-gray-200"
-  const hoverBg = isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"
-  const selectedBg = isDarkMode ? "bg-gray-700" : "bg-gray-300"
+  const textColor = "text-white"
+  const bgColor = "bg-gray-900"
+  const sidebarBg = "bg-gray-800"
+  const borderColor = "border-gray-700"
+  const hoverBg = "hover:bg-gray-700"
+  const selectedBg = "bg-gray-700"
 
   return (
-    <div className={`flex h-full ${bgColor} ${textColor}`}>
+    <div className={`min-h-full flex ${bgColor} ${textColor}`}>
       {/* Sidebar */}
       <div className={`w-64 ${sidebarBg} border-r ${borderColor} flex flex-col`}>
         <div className="p-3 border-b border-gray-700 flex justify-between items-center">
@@ -162,7 +162,7 @@ Portfolio: Mihir Suthar | macOS Portfolio`,
             >
               <h3 className="font-medium truncate">{note.title}</h3>
               <p className="text-xs text-gray-500 mt-1">{note.date}</p>
-              <p className={`text-sm mt-1 truncate ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+              <p className="text-sm mt-1 truncate text-gray-400">
                 {note.content.split("\n")[0].replace(/^#+ /, "")}
               </p>
             </div>

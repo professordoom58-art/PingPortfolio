@@ -2,71 +2,44 @@
 
 import { useState, useEffect } from "react"
 import BootScreen from "@/components/boot-screen"
-import LoginScreen from "@/components/login-screen"
 import Desktop from "@/components/desktop"
 import SleepScreen from "@/components/sleep-screen"
 import ShutdownScreen from "@/components/shutdown-screen"
 import IOSHome from "@/components/ios/ios-home"
 
-type SystemState = "booting" | "login" | "desktop" | "sleeping" | "shutdown" | "restarting"
+type SystemState = "booting" | "desktop" | "sleeping" | "shutdown" | "restarting"
 
 export default function Home() {
   const [systemState, setSystemState] = useState<SystemState>("booting")
-  const [isDarkMode, setIsDarkMode] = useState(false) // Default to light mode
   const [screenBrightness, setScreenBrightness] = useState(90)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Simulate boot sequence
+  // Boot sequence: the boot animation plays, then we go straight to the desktop.
+  // There is no login/lock screen step anymore.
   useEffect(() => {
-    if (systemState === "booting") {
+    if (systemState === "booting" || systemState === "restarting") {
       const timer = setTimeout(() => {
-        setSystemState(isMobile ? "desktop" : "login")
+        setSystemState("desktop")
       }, 3000)
 
       return () => clearTimeout(timer)
     }
+  }, [systemState])
 
-    if (systemState === "restarting") {
-      const bootTimer = setTimeout(() => {
-        setSystemState(isMobile ? "desktop" : "login")
-      }, 3000)
-
-      return () => clearTimeout(bootTimer)
-    }
-  }, [systemState, isMobile])
-
-  // Load settings from localStorage
+  // Load persisted screen brightness
   useEffect(() => {
-    const savedDarkMode = localStorage.getItem("isDarkMode")
-    if (savedDarkMode !== null) {
-      setIsDarkMode(savedDarkMode === "true")
-    }
-
     const savedBrightness = localStorage.getItem("screenBrightness")
     if (savedBrightness !== null) {
       setScreenBrightness(Number.parseInt(savedBrightness))
     }
   }, [])
 
-  const handleLogin = () => {
-    if (isMobile) {
-      setSystemState("desktop")
-      return
-    }
-
-    setSystemState("desktop")
-  }
-
-  const handleLogout = () => {
-    setSystemState("login")
-  }
-
   const handleSleep = () => {
     setSystemState("sleeping")
   }
 
   const handleWakeUp = () => {
-    setSystemState("login")
+    setSystemState("desktop")
   }
 
   const handleShutdown = () => {
@@ -81,16 +54,11 @@ export default function Home() {
     setSystemState("restarting")
   }
 
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode
-    setIsDarkMode(newMode)
-    localStorage.setItem("isDarkMode", newMode.toString())
-  }
-
   const updateBrightness = (value: number) => {
     setScreenBrightness(value)
     localStorage.setItem("screenBrightness", value.toString())
   }
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -102,15 +70,13 @@ export default function Home() {
 
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
+
   // Render the appropriate screen based on system state
   const renderScreen = () => {
     switch (systemState) {
       case "booting":
       case "restarting":
         return <BootScreen />
-
-      case "login":
-        return <LoginScreen onLogin={handleLogin} isDarkMode={isDarkMode} onToggleDarkMode={toggleDarkMode} />
 
       case "desktop":
         if (isMobile) {
@@ -119,19 +85,16 @@ export default function Home() {
 
         return (
           <Desktop
-            onLogout={handleLogout}
             onSleep={handleSleep}
             onShutdown={handleShutdown}
             onRestart={handleRestart}
-            initialDarkMode={isDarkMode}
-            onToggleDarkMode={toggleDarkMode}
             initialBrightness={screenBrightness}
             onBrightnessChange={updateBrightness}
           />
         )
 
       case "sleeping":
-        return <SleepScreen onWakeUp={handleWakeUp} isDarkMode={isDarkMode} />
+        return <SleepScreen onWakeUp={handleWakeUp} />
 
       case "shutdown":
         return <ShutdownScreen onBoot={handleBoot} />
@@ -141,7 +104,7 @@ export default function Home() {
     }
   }
 
-return (
+  return (
     <div className="relative h-screen w-screen overflow-hidden">
       {renderScreen()}
 

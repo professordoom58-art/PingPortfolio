@@ -5,19 +5,19 @@ import { ImageIcon, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface FaceTimeProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
 }
 
-export default function FaceTime({ isDarkMode = true }: FaceTimeProps) {
+export default function FaceTime({}: FaceTimeProps) {
   const [isCameraAvailable, setIsCameraAvailable] = useState(false)
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
-  const bgColor = isDarkMode ? "bg-gray-900" : "bg-white"
-  const textColor = isDarkMode ? "text-white" : "text-gray-800"
-  const buttonBg = isDarkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-gray-100 hover:bg-gray-200"
+  const bgColor = "bg-gray-900"
+  const textColor = "text-white"
+  const buttonBg = "bg-gray-800 hover:bg-gray-700"
 
   // Start camera when component mounts
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function FaceTime({ isDarkMode = true }: FaceTimeProps) {
   }
 
   return (
-    <div className={`h-full flex flex-col ${bgColor} ${textColor}`}>
+    <div className={`min-h-full flex flex-col ${bgColor} ${textColor}`}>
       <div className="flex-1 flex flex-col items-center justify-center p-4 relative">
         {isCameraAvailable ? (
           <video ref={videoRef} autoPlay playsInline className="w-full max-w-2xl h-auto rounded-xl bg-black" />
@@ -112,7 +112,7 @@ export default function FaceTime({ isDarkMode = true }: FaceTimeProps) {
 
       {/* Captured photos gallery */}
       {capturedPhotos.length > 0 && (
-        <div className={`p-4 border-t ${isDarkMode ? "border-gray-800" : "border-gray-200"}`}>
+        <div className="p-4 border-t border-gray-800">
           <h3 className="text-sm font-medium mb-2">Captured Photos</h3>
           <div className="flex overflow-x-auto space-x-3 pb-2">
             {capturedPhotos.map((photo, index) => (

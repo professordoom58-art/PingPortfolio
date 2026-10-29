@@ -12,24 +12,19 @@ import ControlCenter from "@/components/control-center"
 import Spotlight from "@/components/spotlight"
 import type { AppWindow } from "@/types"
 import { IOSProfileWidget } from "@/components/ios/ios-profile-widget";
+
 interface DesktopProps {
-  onLogout: () => void
   onSleep: () => void
   onShutdown: () => void
   onRestart: () => void
-  initialDarkMode: boolean
-  onToggleDarkMode: () => void
   initialBrightness: number
   onBrightnessChange: (value: number) => void
 }
 
 export default function Desktop({
-  onLogout,
   onSleep,
   onShutdown,
   onRestart,
-  initialDarkMode,
-  onToggleDarkMode,
   initialBrightness,
   onBrightnessChange,
 }: DesktopProps) {
@@ -39,7 +34,6 @@ export default function Desktop({
   const [showLaunchpad, setShowLaunchpad] = useState(false)
   const [showControlCenter, setShowControlCenter] = useState(false)
   const [showSpotlight, setShowSpotlight] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(initialDarkMode)
   const [screenBrightness, setScreenBrightness] = useState(initialBrightness)
   const desktopRef = useRef<HTMLDivElement>(null)
 
@@ -53,11 +47,6 @@ export default function Desktop({
     return () => clearInterval(timer)
   }, [])
 
-  // Update local state when props change
-  useEffect(() => {
-    setIsDarkMode(initialDarkMode)
-  }, [initialDarkMode])
-
   useEffect(() => {
     setScreenBrightness(initialBrightness)
   }, [initialBrightness])
@@ -67,7 +56,8 @@ export default function Desktop({
     const isOpen = openWindows.some((window) => window.id === app.id)
 
     if (!isOpen) {
-      setOpenWindows((prev) => [...prev, app])
+      // Record how many windows were already open so the new one can cascade.
+      setOpenWindows((prev) => [...prev, { ...app, cascadeIndex: prev.length }])
     }
 
     // Set as active window
@@ -111,12 +101,6 @@ export default function Desktop({
     if (showControlCenter) setShowControlCenter(false)
   }
 
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode
-    setIsDarkMode(newMode)
-    onToggleDarkMode()
-  }
-
   const updateBrightness = (value: number) => {
     setScreenBrightness(value)
     onBrightnessChange(value)
@@ -135,38 +119,36 @@ export default function Desktop({
     <div className="relative">
       <div
         ref={desktopRef}
-        className={`relative h-screen w-screen overflow-hidden ${isDarkMode ? "dark" : ""}`}
+        className="dark relative h-screen w-screen overflow-hidden"
         onClick={handleDesktopClick}
       >
-        <Wallpaper isDarkMode={isDarkMode} />
+        <Wallpaper />
 
         <Menubar
           time={time}
-          onLogout={onLogout}
           onSleep={onSleep}
           onShutdown={onShutdown}
           onRestart={onRestart}
           onSpotlightClick={toggleSpotlight}
           onControlCenterClick={toggleControlCenter}
-          isDarkMode={isDarkMode}
           activeWindow={activeWindowId ? openWindows.find((w) => w.id === activeWindowId) || null : null}
         />
 
-        {/* Desktop Widget */}
-        <div className="absolute top-10 left-6 z-10">
+        {/* Desktop Widget - stays in the background desktop layer, links stay clickable */}
+        <div className="absolute left-6 top-10 z-10">
           <IOSProfileWidget desktop />
         </div>
 
-        {/* Windows */}
-        <div className="absolute inset-0 pt-6 pb-16">
-          {openWindows.map((window) => (
+        {/* Windows layer - above desktop widgets, below the dock and menu bar */}
+        <div className="pointer-events-none absolute inset-0 z-20">
+          {openWindows.map((window, index) => (
             <Window
               key={window.id}
               window={window}
               isActive={activeWindowId === window.id}
+              zIndex={10 + index}
               onClose={() => closeWindow(window.id)}
               onFocus={() => setActiveWindow(window.id)}
-              isDarkMode={isDarkMode}
             />
           ))}
         </div>
@@ -178,8 +160,6 @@ export default function Desktop({
         {showControlCenter && (
           <ControlCenter
             onClose={() => setShowControlCenter(false)}
-            isDarkMode={isDarkMode}
-            onToggleDarkMode={toggleDarkMode}
             brightness={screenBrightness}
             onBrightnessChange={updateBrightness}
           />
@@ -192,13 +172,12 @@ export default function Desktop({
           onAppClick={openApp}
           onLaunchpadClick={toggleLaunchpad}
           activeAppIds={openWindows.map((w) => w.id)}
-          isDarkMode={isDarkMode}
         />
       </div>
 
       {/* Brightness overlay */}
       <div
-        className="absolute inset-0 bg-black pointer-events-none z-50 transition-opacity duration-300"
+        className="pointer-events-none absolute inset-0 z-[2000] bg-black transition-opacity duration-300"
         style={{ opacity: Math.max(0.1, 0.9 - screenBrightness / 100) }}
       />
     </div>

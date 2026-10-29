@@ -47,9 +47,9 @@ export default function Launchpad({ onAppClick, onClose }: LaunchpadProps) {
       id: app.id,
       title: app.title,
       component: app.component,
-      position: { x: Math.random() * 200 + 100, y: Math.random() * 100 + 50 },
-      size: { width: 800, height: 600 },
-      innerHeight: 600,
+      position: { x: 0, y: 0 },
+      size: { width: 850, height: 600 },
+      innerHeight: typeof window !== "undefined" ? window.innerHeight : 600,
     })
     onClose()
   }

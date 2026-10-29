@@ -1,20 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Wifi, Bluetooth, Moon, Sun, Volume2, VolumeX, Maximize } from "lucide-react"
+import { Wifi, Bluetooth, Volume2, VolumeX, Maximize } from "lucide-react"
 
 interface ControlCenterProps {
   onClose: () => void
-  isDarkMode: boolean
-  onToggleDarkMode: () => void
   brightness: number
   onBrightnessChange: (value: number) => void
 }
 
 export default function ControlCenter({
   onClose,
-  isDarkMode,
-  onToggleDarkMode,
   brightness,
   onBrightnessChange,
 }: ControlCenterProps) {
@@ -71,7 +67,7 @@ export default function ControlCenter({
       onClick={(e) => e.stopPropagation()}
     >
       <div className="p-4">
-        <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           <button
             className={`flex flex-col items-center justify-center p-3 rounded-xl ${
               wifiEnabled ? "bg-blue-500" : "bg-gray-700"
@@ -90,16 +86,6 @@ export default function ControlCenter({
           >
             <Bluetooth className="w-6 h-6 text-white mb-1" />
             <span className="text-white text-xs">Bluetooth</span>
-          </button>
-
-          <button
-            className={`flex flex-col items-center justify-center p-3 rounded-xl ${
-              isDarkMode ? "bg-blue-500" : "bg-gray-700"
-            }`}
-            onClick={onToggleDarkMode}
-          >
-            {isDarkMode ? <Moon className="w-6 h-6 text-white mb-1" /> : <Sun className="w-6 h-6 text-white mb-1" />}
-            <span className="text-white text-xs">{isDarkMode ? "Dark" : "Light"}</span>
           </button>
 
           <button

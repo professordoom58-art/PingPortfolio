@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { X, Minus, ArrowRightIcon as ArrowsMaximize } from "lucide-react"
 import type { AppWindow } from "@/types"
 import Notes from "@/components/apps/notes"
@@ -18,11 +18,19 @@ import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
 import Photoshop from "@/components/apps/photoshop"
 import Illustrator from "@/components/apps/illustrator"
-
+import {
+  clampPosition,
+  clampSize,
+  getBottomBound,
+  getInitialGeometry,
+  getTopBound,
+  MIN_WINDOW_HEIGHT,
+  MIN_WINDOW_WIDTH,
+} from "@/lib/window-geometry"
 
 const componentMap: Record<
   string,
-  React.ComponentType<{ isDarkMode?: boolean }>
+  React.ComponentType<{ isMobile?: boolean }>
 > = {
   Notes,
   Safari,
@@ -42,20 +50,25 @@ const componentMap: Record<
 interface WindowProps {
   window: AppWindow
   isActive: boolean
+  /** Stacking order within the windows layer; higher renders on top. */
+  zIndex: number
   onClose: () => void
   onFocus: () => void
-  isDarkMode: boolean
 }
 
 export default function Window({
   window,
   isActive,
+  zIndex,
   onClose,
   onFocus,
-  isDarkMode,
 }: WindowProps) {
-  const [position, setPosition] = useState(window.position)
-  const [size, setSize] = useState(window.size)
+  // Recompute geometry on mount so windows are centered in the *current*
+  // viewport rather than trusting a position baked in by the caller.
+  const [geometry] = useState(() => getInitialGeometry(window.cascadeIndex ?? 0))
+  const [position, setPosition] = useState(geometry.position)
+  const [size, setSize] = useState(geometry.size)
+
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [isMaximized, setIsMaximized] = useState(false)
@@ -69,13 +82,32 @@ export default function Window({
 
   const AppComponent = componentMap[window.component]
 
+  // Keep windows inside the usable desktop when the viewport changes.
+  useEffect(() => {
+    const handleResize = () => {
+      setSize((prevSize) => {
+        const nextSize = clampSize(prevSize, position)
+        setPosition((prevPos) => clampPosition(prevPos, nextSize))
+        return nextSize
+      })
+    }
+
+    globalThis.window.addEventListener("resize", handleResize)
+    return () => globalThis.window.removeEventListener("resize", handleResize)
+  }, [position])
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        })
+        setPosition(
+          clampPosition(
+            {
+              x: e.clientX - dragOffset.x,
+              y: e.clientY - dragOffset.y,
+            },
+            size,
+          ),
+        )
       } else if (isResizing && resizeDirection) {
         e.preventDefault()
         const dx = e.clientX - resizeStartPos.x
@@ -86,34 +118,30 @@ export default function Window({
         let newX = position.x
         let newY = position.y
 
-        // Minimum window dimensions
-        const minWidth = 300
-        const minHeight = 200
-
         if (resizeDirection.includes("e")) {
-          newWidth = Math.max(minWidth, resizeStartSize.width + dx)
+          newWidth = Math.max(MIN_WINDOW_WIDTH, resizeStartSize.width + dx)
         }
         if (resizeDirection.includes("s")) {
-          newHeight = Math.max(minHeight, resizeStartSize.height + dy)
+          newHeight = Math.max(MIN_WINDOW_HEIGHT, resizeStartSize.height + dy)
         }
         if (resizeDirection.includes("w")) {
           const proposedWidth = resizeStartSize.width - dx
-          if (proposedWidth >= minWidth) {
+          if (proposedWidth >= MIN_WINDOW_WIDTH) {
             newWidth = proposedWidth
             newX = position.x + dx
           }
         }
         if (resizeDirection.includes("n")) {
           const proposedHeight = resizeStartSize.height - dy
-          if (proposedHeight >= minHeight) {
+          if (proposedHeight >= MIN_WINDOW_HEIGHT) {
             newHeight = proposedHeight
             newY = position.y + dy
           }
         }
 
-        setSize({ width: newWidth, height: newHeight })
+        setSize(clampSize({ width: newWidth, height: newHeight }, { x: newX, y: newY }))
         if (resizeDirection.includes("w") || resizeDirection.includes("n")) {
-          setPosition({ x: newX, y: newY })
+          setPosition(clampPosition({ x: newX, y: newY }, { width: newWidth, height: newHeight }))
         }
       }
     }
@@ -133,24 +161,30 @@ export default function Window({
       document.removeEventListener("mousemove", handleMouseMove)
       document.removeEventListener("mouseup", handleMouseUp)
     }
-  }, [isDragging, dragOffset, isResizing, resizeDirection, resizeStartPos, resizeStartSize, position])
+  }, [isDragging, dragOffset, isResizing, resizeDirection, resizeStartPos, resizeStartSize, position, size])
 
-  const handleTitleBarMouseDown = (e: React.MouseEvent) => {
-    if (isMaximized) return
+  // Dragging is bound to the title bar only, so the content area stays free
+  // for scrolling and text selection.
+  const handleTitleBarMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (isMaximized) return
 
-    // Prevent dragging when clicking on buttons
-    if ((e.target as HTMLElement).closest(".window-controls")) {
-      return
-    }
+      // Never start a drag from the traffic lights.
+      if ((e.target as HTMLElement).closest(".window-controls")) {
+        return
+      }
 
-    setIsDragging(true)
-    setDragOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    })
+      e.preventDefault()
+      setIsDragging(true)
+      setDragOffset({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y,
+      })
 
-    onFocus()
-  }
+      onFocus()
+    },
+    [isMaximized, position.x, position.y, onFocus],
+  )
 
   const handleResizeMouseDown = (e: React.MouseEvent, direction: string) => {
     e.preventDefault()
@@ -172,22 +206,19 @@ export default function Window({
 
   const toggleMaximize = () => {
     if (isMaximized) {
-      // Restore previous state
-      setPosition(preMaximizeState.position)
+      setPosition(clampPosition(preMaximizeState.position, preMaximizeState.size))
       setSize(preMaximizeState.size)
     } else {
-      // Save current state before maximizing
       setPreMaximizeState({ position, size })
 
-      // Get the available space (accounting for menubar)
-      // Use globalThis.window to avoid shadowing the `window` prop/name
-      const availableHeight = globalThis.window.innerHeight - 26 // 6px for menubar + 20px padding
+      const vw = globalThis.window.innerWidth
+      const top = getTopBound()
+      const bottom = getBottomBound()
 
-      // Maximize
-      setPosition({ x: 0, y: 26 }) // Position below menubar
+      setPosition({ x: 0, y: top })
       setSize({
-        width: globalThis.window.innerWidth,
-        height: availableHeight - 70, // Account for dock
+        width: vw,
+        height: Math.max(MIN_WINDOW_HEIGHT, bottom - top),
       })
     }
 
@@ -199,32 +230,30 @@ export default function Window({
     onClose()
   }
 
-  const titleBarClass = isDarkMode
-    ? isActive
-      ? "bg-gray-800"
-      : "bg-gray-900"
-    : isActive
-      ? "bg-gray-200"
-      : "bg-gray-100"
-
-  const contentBgClass = isDarkMode ? "bg-gray-900" : "bg-white"
-  const textClass = isDarkMode ? "text-white" : "text-gray-800"
-  const resizeBorderClass = isDarkMode ? "border-gray-700" : "border-gray-300"
+  const titleBarClass = isActive ? "bg-gray-800" : "bg-gray-900"
 
   return (
     <div
       ref={windowRef}
-      className={`absolute rounded-lg overflow-hidden shadow-2xl transition-shadow ${isActive ? "shadow-2xl z-10" : "shadow-lg z-0"}`}
+      className={`pointer-events-auto absolute flex flex-col overflow-hidden rounded-lg transition-shadow ${
+        isActive ? "shadow-2xl" : "shadow-lg"
+      }`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
+        zIndex,
       }}
       onClick={onFocus}
     >
-      {/* Title bar */}
-      <div className={`h-8 flex items-center px-3 ${titleBarClass}`} onMouseDown={handleTitleBarMouseDown}>
+      {/* Title bar - fixed height, never shrinks, the only drag handle */}
+      <div
+        className={`window-header flex h-8 shrink-0 items-center px-3 ${titleBarClass} ${
+          isMaximized ? "cursor-default" : "cursor-grab active:cursor-grabbing"
+        }`}
+        onMouseDown={handleTitleBarMouseDown}
+      >
         <div className="window-controls flex items-center space-x-2 mr-4">
           <button
             className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center"
@@ -246,16 +275,14 @@ export default function Window({
           </button>
         </div>
 
-        <div className={`flex-1 text-center text-sm font-medium truncate ${textClass}`}>{window.title}</div>
+        <div className="flex-1 truncate text-center text-sm font-medium text-white">{window.title}</div>
 
         <div className="w-16">{/* Spacer to balance the title */}</div>
       </div>
 
-      {/* Window content */}
-      <div className={`${contentBgClass} h-[calc(100%-2rem)] overflow-auto`}>
-        {AppComponent ? <AppComponent
-          isDarkMode={isDarkMode}
-        /> : <div className="p-4">Content not available</div>}
+      {/* Window content - fills remaining height and scrolls internally */}
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-black">
+        {AppComponent ? <AppComponent /> : <div className="p-4 text-white">Content not available</div>}
       </div>
 
       {/* Resize handles */}

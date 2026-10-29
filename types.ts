@@ -3,6 +3,7 @@ export interface AppWindow {
   title: string
   component: string
 
+  /** Viewport-relative position. Recomputed on mount by the Window component. */
   position: {
     x: number
     y: number
@@ -14,4 +15,7 @@ export interface AppWindow {
   }
 
   innerHeight: number
+
+  /** How many windows were already open when this one launched (cascade offset). */
+  cascadeIndex?: number
 }

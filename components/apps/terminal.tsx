@@ -5,10 +5,10 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 
 interface TerminalProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
 }
 
-export default function Terminal({ isDarkMode = true }: TerminalProps) {
+export default function Terminal({}: TerminalProps) {
   const [input, setInput] = useState("")
   const [history, setHistory] = useState<string[]>([])
   const [commandHistory, setCommandHistory] = useState<string[]>([])
@@ -202,7 +202,7 @@ export default function Terminal({ isDarkMode = true }: TerminalProps) {
   }
 
   return (
-    <div ref={terminalRef} className={`h-full ${bgColor} ${textColor} p-4 font-mono text-sm overflow-auto`}>
+    <div ref={terminalRef} className={`min-h-full ${bgColor} ${textColor} p-4 font-mono text-sm overflow-auto`}>
       {history.map((line, index) => (
         <div key={index} className="whitespace-pre-wrap">
           {line}

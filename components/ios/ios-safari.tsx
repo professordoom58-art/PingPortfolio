@@ -13,7 +13,7 @@ import {
 import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface SafariProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
   onBack?: () => void
 }
 
@@ -508,7 +508,7 @@ function ArticleReader({
   )
 }
 
-export default function Safari({ isDarkMode = true, onBack }: SafariProps) {
+export default function Safari({ onBack }: SafariProps) {
   const [articles, setArticles] = useState<NewsArticle[]>([])
   const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null)
   const [query, setQuery] = useState("")
@@ -606,7 +606,7 @@ export default function Safari({ isDarkMode = true, onBack }: SafariProps) {
     <div
       className={[
         "h-full overflow-hidden text-white",
-        isDarkMode ? "bg-black" : "bg-black",
+        "bg-black",
       ].join(" ")}
     >
       {(onBack || selectedArticle) && (

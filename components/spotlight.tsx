@@ -9,7 +9,6 @@ const spotlightApps = [
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
   { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
   { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal" },
-  { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
   { id: "premiere", title: "Premiere Pro", icon: "/premiere.png", component: "PremierePro" },
   { id: "aftereffects", title: "After Effects", icon: "/aftereffects.png", component: "AfterEffects" },
   { id: "photoshop", title: "Photoshop", icon: "/photoshop.png", component: "Photoshop" },
@@ -70,9 +69,9 @@ export default function Spotlight({ onClose, onAppClick }: SpotlightProps) {
       id: app.id,
       title: app.title,
       component: app.component,
-      position: { x: Math.random() * 200 + 100, y: Math.random() * 100 + 50 },
-      size: { width: 800, height: 600 },
-      innerHeight: typeof window !== 'undefined' ? window.innerHeight : 600,
+      position: { x: 0, y: 0 },
+      size: { width: 850, height: 600 },
+      innerHeight: typeof window !== "undefined" ? window.innerHeight : 600,
     })
     onClose()
   }

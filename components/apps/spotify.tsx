@@ -6,10 +6,10 @@ import { useState, useRef, useEffect } from "react"
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Shuffle, Repeat } from "lucide-react"
 
 interface SpotifyProps {
-  isDarkMode?: boolean
+  isMobile?: boolean
 }
 
-export default function Spotify({ isDarkMode = true }: SpotifyProps) {
+export default function Spotify({}: SpotifyProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
@@ -50,9 +50,9 @@ export default function Spotify({ isDarkMode = true }: SpotifyProps) {
 
   const currentTrack = playlist[currentTrackIndex]
 
-  const bgColor = isDarkMode ? "bg-gray-900" : "bg-white"
-  const textColor = isDarkMode ? "text-white" : "text-gray-800"
-  const secondaryBg = isDarkMode ? "bg-gray-800" : "bg-gray-100"
+  const bgColor = "bg-gray-900"
+  const textColor = "text-white"
+  const secondaryBg = "bg-gray-800"
 
   useEffect(() => {
     const audio = audioRef.current
@@ -212,7 +212,7 @@ export default function Spotify({ isDarkMode = true }: SpotifyProps) {
   }
 
   return (
-    <div className="relative h-full overflow-hidden">
+    <div className="relative min-h-full overflow-hidden">
       {/* Blurred Background */}
       <img
         src={currentTrack.cover}

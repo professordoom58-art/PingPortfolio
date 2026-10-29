@@ -6,27 +6,25 @@ import { ImageIcon, Brush, Layers, Sparkles, Mail } from "lucide-react"
 import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface PhotoshopProps {
-  isDarkMode?: boolean
   isMobile?: boolean
   hideAdobeHeader?: boolean
   onBack?: () => void
 }
 
 export default function Photoshop({
-  isDarkMode = true,
   isMobile = false,
   hideAdobeHeader = false,
   onBack,
 }: PhotoshopProps) {
-  const borderClass = isDarkMode ? "border-zinc-700" : "border-gray-200"
-  const hoverClass = isDarkMode ? "hover:bg-zinc-800" : "hover:bg-gray-100"
-  const mutedTextClass = isDarkMode ? "text-zinc-400" : "text-zinc-600"
-  const cardClass = isDarkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-gray-200 shadow-sm"
-  const pillClass = isDarkMode ? "bg-zinc-800" : "bg-gray-100"
+  const borderClass = "border-zinc-700"
+  const hoverClass = "hover:bg-zinc-800"
+  const mutedTextClass = "text-zinc-400"
+  const cardClass = "bg-zinc-800 border-zinc-700"
+  const pillClass = "bg-zinc-800"
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   return (
-    <div className={`h-full flex flex-col ${isDarkMode ? "bg-black text-white" : "bg-white text-black"}`}>
+    <div className="min-h-full flex flex-col bg-black text-white">
       {!hideAdobeHeader && (
         <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">

@@ -20,15 +20,15 @@ export default function Settings() {
   ]
 
   return (
-    <div className="flex h-full">
+    <div className="flex min-h-full bg-gray-900 text-white">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-100 p-2">
+      <div className="w-64 bg-gray-800 p-2">
         <div className="space-y-1">
           {sections.map((section) => (
             <div
               key={section.id}
               className={`flex items-center px-3 py-2 rounded cursor-pointer ${
-                activeSection === section.id ? "bg-blue-500 text-white" : "hover:bg-gray-200"
+                activeSection === section.id ? "bg-blue-500 text-white" : "hover:bg-gray-700"
               }`}
               onClick={() => setActiveSection(section.id)}
             >
@@ -48,7 +48,7 @@ export default function Settings() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-3">About</h3>
-                <div className="bg-gray-100 p-4 rounded-lg">
+                <div className="bg-gray-800 p-4 rounded-lg">
                   <p className="mb-2">
                     <strong>macOS Portfolio:</strong> Version 1.0
                   </p>
@@ -63,10 +63,10 @@ export default function Settings() {
 
               <div>
                 <h3 className="text-lg font-medium mb-3">Software Update</h3>
-                <div className="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
+                <div className="bg-gray-800 p-4 rounded-lg flex items-center justify-between">
                   <div>
                     <p className="font-medium">Your portfolio is up to date</p>
-                    <p className="text-sm text-gray-600">macOS Portfolio 1.0</p>
+                    <p className="text-sm text-gray-400">macOS Portfolio 1.0</p>
                   </div>
                   <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Check Now</button>
                 </div>
@@ -74,10 +74,10 @@ export default function Settings() {
 
               <div>
                 <h3 className="text-lg font-medium mb-3">Language & Region</h3>
-                <div className="bg-gray-100 p-4 rounded-lg">
+                <div className="bg-gray-800 p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-3">
                     <p className="font-medium">Preferred language</p>
-                    <select className="px-3 py-1 border rounded">
+                    <select className="px-3 py-1 border border-gray-600 bg-gray-700 rounded">
                       <option>English (US)</option>
                       <option>Spanish</option>
                       <option>French</option>
@@ -86,7 +86,7 @@ export default function Settings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <p className="font-medium">Region</p>
-                    <select className="px-3 py-1 border rounded">
+                    <select className="px-3 py-1 border border-gray-600 bg-gray-700 rounded">
                       <option>United States</option>
                       <option>Canada</option>
                       <option>United Kingdom</option>
@@ -108,29 +108,14 @@ export default function Settings() {
                 <h3 className="text-lg font-medium mb-3">Theme</h3>
                 <div className="flex space-x-4">
                   <div className="border-2 border-blue-500 p-1 rounded-lg">
-                    <div className="bg-white w-32 h-24 rounded flex flex-col">
-                      <div className="h-6 bg-gray-200 rounded-t"></div>
-                      <div className="flex-1"></div>
-                    </div>
-                    <p className="text-center mt-2 font-medium">Light</p>
-                  </div>
-
-                  <div className="border-2 border-gray-300 p-1 rounded-lg">
                     <div className="bg-gray-800 w-32 h-24 rounded flex flex-col">
                       <div className="h-6 bg-gray-700 rounded-t"></div>
                       <div className="flex-1"></div>
                     </div>
                     <p className="text-center mt-2 font-medium">Dark</p>
                   </div>
-
-                  <div className="border-2 border-gray-300 p-1 rounded-lg">
-                    <div className="bg-gradient-to-b from-white to-gray-800 w-32 h-24 rounded flex flex-col">
-                      <div className="h-6 bg-gradient-to-b from-gray-200 to-gray-700 rounded-t"></div>
-                      <div className="flex-1"></div>
-                    </div>
-                    <p className="text-center mt-2 font-medium">Auto</p>
-                  </div>
                 </div>
+                <p className="text-sm text-gray-400 mt-3">Dark appearance is always on.</p>
               </div>
 
               <div>
@@ -163,7 +148,7 @@ export default function Settings() {
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <h2 className="text-2xl font-semibold mb-2">{sections.find((s) => s.id === activeSection)?.name}</h2>
-              <p className="text-gray-500">This section is under development</p>
+              <p className="text-gray-400">This section is under development</p>
             </div>
           </div>
         )}

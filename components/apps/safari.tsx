@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 interface SafariProps {
-    isDarkMode?: boolean;
+    isMobile?: boolean;
 }
 
 const favorites = [
@@ -35,33 +35,24 @@ const favorites = [
         url: "mailto:pingmihir@outlook.com",
     },
 ];
-export default function Safari({
-    isDarkMode = false,
-}: SafariProps) {
+export default function Safari() {
 
     return (
 
         <div
-            className={`h-full flex flex-col ${isDarkMode
-                ? "bg-[#1C1C1E] text-[#F2F2F7]"
-                : "bg-[#F6F6F7] text-[#1D1D1F]"
-                }`}
+            className="min-h-full flex flex-col bg-[#1C1C1E] text-[#F2F2F7]"
 
         >
             <div
-                className={`
+                className="
 h-12
 border-b
 flex
 items-center
 px-3
 gap-3
-${isDarkMode
-                        ? "bg-[#2C2C2E] border-[#3A3A3C]"
-                        : "bg-[#ECECEC] border-[#D1D1D6]"
-                    }
-`}
-
+bg-[#2C2C2E] border-[#3A3A3C]
+"
             >
 
                 <button className="w-8 h-8 rounded-full hover:bg-zinc-200 flex items-center justify-center">
@@ -80,7 +71,7 @@ ${isDarkMode
                     className="
 flex-1
 h-9
-bg-white
+bg-[#3A3A3C]
 rounded-full
 px-4
 flex
@@ -141,10 +132,7 @@ justify-center
             w-20 h-20 rounded-[22px]
             flex items-center justify-center
             transition-all duration-200
-            ${isDarkMode
-                                                    ? "bg-zinc-800 group-hover:bg-zinc-700"
-                                                    : "bg-white group-hover:bg-zinc-100 shadow-sm border border-zinc-200"
-                                                }
+            bg-zinc-800 group-hover:bg-zinc-700
           `}
                                         >
                                             <Image
@@ -156,8 +144,7 @@ justify-center
                                         </div>
 
                                         <span
-                                            className={`mt-3 text-sm ${isDarkMode ? "text-zinc-300" : "text-zinc-700"
-                                                }`}
+                                            className="mt-3 text-sm text-zinc-300"
                                         >
                                             {favorite.title}
                                         </span>
@@ -167,8 +154,8 @@ justify-center
                         </div>
                     </p><div className="mt-10">
 
-                        <div className="border-t border-zinc-200 pt-10">
-                            <p className="mt-1 max-w-2xl text-zinc-600 leading-7">
+                        <div className="border-t border-zinc-700 pt-10">
+                            <p className="mt-1 max-w-2xl text-zinc-400 leading-7">
 
                                 Welcome to my portfolio.
 

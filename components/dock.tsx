@@ -26,10 +26,9 @@ interface DockProps {
   onAppClick: (app: AppWindow) => void
   onLaunchpadClick: () => void
   activeAppIds: string[]
-  isDarkMode: boolean
 }
 
-export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDarkMode }: DockProps) {
+export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds }: DockProps) {
   const [mouseX, setMouseX] = useState<number | null>(null)
   const dockRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -69,23 +68,16 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
       return
     }
 
+    // Position and size are computed by the Window component on mount so every
+    // window opens centered in the current viewport.
     onAppClick({
-  id: app.id,
-  title: app.title,
-  component: app.component,
-
-  position: {
-    x: Math.random() * 200 + 100,
-    y: Math.random() * 100 + 50,
-  },
-
-  size: {
-    width: 800,
-    height: 600,
-  },
-
-  innerHeight: 600,
-})
+      id: app.id,
+      title: app.title,
+      component: app.component,
+      position: { x: 0, y: 0 },
+      size: { width: 850, height: 600 },
+      innerHeight: typeof window !== "undefined" ? window.innerHeight : 600,
+    })
 
     // Close mobile menu after clicking an app
     if (showMobileMenu) {
@@ -135,12 +127,12 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
   const hiddenApps = isMobile ? dockApps.slice(4) : []
 
   return (
-    <div ref={dockRef} className="fixed bottom-2 left-1/2 transform -translate-x-1/2 z-50">
+    <div ref={dockRef} className="fixed bottom-2 left-1/2 z-[1000] -translate-x-1/2">
       {/* Mobile expanded menu */}
       {isMobile && showMobileMenu && (
         <div
           className={`absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[280px] 
-          ${isDarkMode ? "bg-gray-800/90" : "bg-white/90"} backdrop-blur-xl 
+          bg-gray-800/90 backdrop-blur-xl 
           rounded-xl border border-white/20 shadow-lg p-4 mb-2`}
         >
           <div className="grid grid-cols-4 gap-4">
@@ -158,7 +150,7 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
                     draggable="false"
                   />
                 </div>
-                <span className={`text-xs mt-1 ${isDarkMode ? "text-white" : "text-gray-800"}`}>{app.title}</span>
+                <span className="text-xs mt-1 text-white">{app.title}</span>
                 {activeAppIds.includes(app.id) && <div className="w-1 h-1 bg-white rounded-full mt-1"></div>}
               </div>
             ))}
@@ -169,7 +161,7 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
       {/* Main dock */}
       <div
         className={`px-3 py-2 rounded-2xl 
-          ${isDarkMode ? "bg-white/10" : "bg-white/60"} backdrop-blur-xl 
+          bg-white/10 backdrop-blur-xl 
           flex items-end border border-white/20 shadow-lg
           ${isMobile ? "h-20" : "h-16"}`}
         onMouseMove={handleMouseMove}
@@ -229,10 +221,10 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
             <div className="relative cursor-pointer">
               <div
                 className={`w-14 h-14 rounded-full flex items-center justify-center 
-                ${isDarkMode ? "bg-gray-700" : "bg-gray-200"} 
-                ${showMobileMenu ? (isDarkMode ? "bg-blue-700" : "bg-blue-200") : ""}`}
+                bg-gray-700 
+                ${showMobileMenu ? "bg-blue-700" : ""}`}
               >
-                <MoreHorizontal className={`w-8 h-8 ${isDarkMode ? "text-white" : "text-gray-800"}`} />
+                <MoreHorizontal className="w-8 h-8 text-white" />
               </div>
             </div>
           </div>
