@@ -10,6 +10,9 @@ import Window from "@/components/window"
 import Launchpad from "@/components/launchpad"
 import ControlCenter from "@/components/control-center"
 import Spotlight from "@/components/spotlight"
+import AboutThisMac from "@/components/about-this-mac"
+import SiriAssistant from "@/components/siri-assistant"
+import { MusicProvider } from "@/components/music-provider"
 import type { AppWindow } from "@/types"
 import { IOSProfileWidget } from "@/components/ios/ios-profile-widget";
 
@@ -35,6 +38,10 @@ export default function Desktop({
   const [showControlCenter, setShowControlCenter] = useState(false)
   const [showSpotlight, setShowSpotlight] = useState(false)
   const [screenBrightness, setScreenBrightness] = useState(initialBrightness)
+  const [wifiEnabled, setWifiEnabled] = useState(true)
+  const [wifiNetwork, setWifiNetwork] = useState("Home")
+  const [showAbout, setShowAbout] = useState(false)
+  const [showSiri, setShowSiri] = useState(false)
   const desktopRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,6 +57,25 @@ export default function Desktop({
   useEffect(() => {
     setScreenBrightness(initialBrightness)
   }, [initialBrightness])
+
+  // Wi-Fi state is shared by the menu bar popover and the Control Center.
+  useEffect(() => {
+    const savedWifi = localStorage.getItem("wifiEnabled")
+    if (savedWifi !== null) setWifiEnabled(savedWifi === "true")
+
+    const savedNetwork = localStorage.getItem("wifiNetwork")
+    if (savedNetwork) setWifiNetwork(savedNetwork)
+  }, [])
+
+  const updateWifiEnabled = (value: boolean) => {
+    setWifiEnabled(value)
+    localStorage.setItem("wifiEnabled", value.toString())
+  }
+
+  const updateWifiNetwork = (name: string) => {
+    setWifiNetwork(name)
+    localStorage.setItem("wifiNetwork", name)
+  }
 
   const openApp = (app: AppWindow) => {
     // Check if app is already open
@@ -101,13 +127,51 @@ export default function Desktop({
     if (showControlCenter) setShowControlCenter(false)
   }
 
+  // Cmd+K / Ctrl+K toggles Spotlight, matching macOS.
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault()
+        setShowSpotlight((prev) => !prev)
+        setShowControlCenter(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
+
   const updateBrightness = (value: number) => {
     setScreenBrightness(value)
     onBrightnessChange(value)
   }
 
-  const handleDesktopClick = (e: React.MouseEvent) => {
-    // Only handle clicks directly on the desktop, not on children
+  // Used by the Control Center media card: focus (or open) Spotify, then dismiss.
+  const openSpotifyFromControlCenter = () => {
+    openApp({
+      id: "spotify",
+      title: "Spotify",
+      component: "Spotify",
+      position: { x: 0, y: 0 },
+      size: { width: 850, height: 600 },
+      innerHeight: typeof window !== "undefined" ? window.innerHeight : 600,
+    })
+    setShowControlCenter(false)
+  }
+
+  /** Open (or focus) an app by id, used by the Apple menu and the assistant. */
+  const openAppById = (id: string, title: string, component: string) => {
+    openApp({
+      id,
+      title,
+      component,
+      position: { x: 0, y: 0 },
+      size: { width: 850, height: 600 },
+      innerHeight: typeof window !== "undefined" ? window.innerHeight : 600,
+    })
+  }
+
+  const handleDesktopClick = (e: React.MouseEvent) => {    // Only handle clicks directly on the desktop, not on children
     if (e.target === desktopRef.current) {
       setActiveWindowId(null)
       if (showControlCenter) setShowControlCenter(false)
@@ -116,7 +180,8 @@ export default function Desktop({
   }
 
   return (
-    <div className="relative">
+    <MusicProvider>
+      <div className="relative">
       <div
         ref={desktopRef}
         className="dark relative h-screen w-screen overflow-hidden"
@@ -131,6 +196,27 @@ export default function Desktop({
           onRestart={onRestart}
           onSpotlightClick={toggleSpotlight}
           onControlCenterClick={toggleControlCenter}
+          isControlCenterOpen={showControlCenter}
+          wifiEnabled={wifiEnabled}
+          onWifiEnabledChange={updateWifiEnabled}
+          wifiNetwork={wifiNetwork}
+          onWifiNetworkChange={updateWifiNetwork}
+          onWifiPopoverOpen={() => {
+            setShowControlCenter(false)
+            setShowSpotlight(false)
+            setShowSiri(false)
+          }}
+          onAboutThisMac={() => setShowAbout(true)}
+          onSystemSettings={() => setShowControlCenter(true)}
+          onAppStore={() => openAppById("launchpad", "Launchpad", "Launchpad")}
+          onForceQuit={() => setShowSpotlight(true)}
+          onLockScreen={() => onSleep()}
+          onSiriClick={() => {
+            setShowSiri((prev) => !prev)
+            setShowControlCenter(false)
+            setShowSpotlight(false)
+          }}
+          isSiriOpen={showSiri}
           activeWindow={activeWindowId ? openWindows.find((w) => w.id === activeWindowId) || null : null}
         />
 
@@ -162,17 +248,47 @@ export default function Desktop({
             onClose={() => setShowControlCenter(false)}
             brightness={screenBrightness}
             onBrightnessChange={updateBrightness}
+            onOpenSpotify={openSpotifyFromControlCenter}
+            wifiEnabled={wifiEnabled}
+            onWifiEnabledChange={updateWifiEnabled}
+            wifiNetwork={wifiNetwork}
           />
         )}
 
         {/* Spotlight */}
-        {showSpotlight && <Spotlight onClose={() => setShowSpotlight(false)} onAppClick={openApp} />}
+        {showSpotlight && (
+          <Spotlight
+            onClose={() => setShowSpotlight(false)}
+            onAppClick={openApp}
+            onOpenLaunchpad={() => setShowLaunchpad(true)}
+            onOpenControlCenter={() => setShowControlCenter(true)}
+            onSleep={onSleep}
+            onRestart={onRestart}
+            onShutdown={onShutdown}
+          />
+        )}
 
         <Dock
           onAppClick={openApp}
           onLaunchpadClick={toggleLaunchpad}
           activeAppIds={openWindows.map((w) => w.id)}
         />
+
+        {/* About This Mac modal */}
+        {showAbout && (
+          <AboutThisMac
+            onClose={() => setShowAbout(false)}
+            onMoreInfo={() => openAppById("notes", "Notes", "Notes")}
+          />
+        )}
+
+        {/* Apple Intelligence assistant */}
+        {showSiri && (
+          <SiriAssistant
+            onClose={() => setShowSiri(false)}
+            onLaunchApp={(app) => openAppById(app.id, app.title, app.component)}
+          />
+        )}
       </div>
 
       {/* Brightness overlay */}
@@ -180,6 +296,7 @@ export default function Desktop({
         className="pointer-events-none absolute inset-0 z-[2000] bg-black transition-opacity duration-300"
         style={{ opacity: Math.max(0.1, 0.9 - screenBrightness / 100) }}
       />
-    </div>
+      </div>
+    </MusicProvider>
   )
 }

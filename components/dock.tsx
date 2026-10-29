@@ -9,10 +9,8 @@ import type { AppWindow } from "@/types"
 // Updated app list with Snake game
 const dockApps = [
   { id: "launchpad", title: "Launchpad", icon: "/launchpad.png", component: "Launchpad", isSystem: true },
-  { id: "safari", title: "Safari", icon: "/safari.png", component: "Safari" },
   { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail" },
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
-  { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
   { id: "premiere", title: "Premiere Pro", icon: "/premiere.png", component: "PremierePro" },
   { id: "aftereffects", title: "After Effects", icon: "/aftereffects.png", component: "AfterEffects" },
   { id: "photoshop", title: "Photoshop", icon: "/photoshop.png", component: "Photoshop" },

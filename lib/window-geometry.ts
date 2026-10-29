@@ -4,8 +4,8 @@
 // full-screen `inset-0` container), so these helpers can work directly with
 // window.innerWidth / window.innerHeight.
 
-/** Height of the macOS menu bar (`h-6` in menubar.tsx). */
-export const MENUBAR_HEIGHT = 24
+/** Height of the macOS menu bar (`h-7` in menubar.tsx). */
+export const MENUBAR_HEIGHT = 28
 
 /** Vertical space reserved for the dock at the bottom of the screen. */
 export const DOCK_RESERVED = 88

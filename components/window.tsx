@@ -3,11 +3,9 @@
 import type React from "react"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { X, Minus, ArrowRightIcon as ArrowsMaximize } from "lucide-react"
+import { X, Minus, Folder, ArrowRightIcon as ArrowsMaximize } from "lucide-react"
 import type { AppWindow } from "@/types"
 import Notes from "@/components/apps/notes"
-import Safari from "@/components/apps/safari"
-import FaceTime from "@/components/apps/facetime"
 import Terminal from "@/components/apps/terminal"
 import Mail from "@/components/apps/mail"
 import YouTube from "@/components/apps/youtube"
@@ -33,8 +31,6 @@ const componentMap: Record<
   React.ComponentType<{ isMobile?: boolean }>
 > = {
   Notes,
-  Safari,
-  FaceTime,
   Terminal,
   Mail,
   YouTube,
@@ -275,13 +271,26 @@ export default function Window({
           </button>
         </div>
 
-        <div className="flex-1 truncate text-center text-sm font-medium text-white">{window.title}</div>
+        <div className="flex flex-1 items-center justify-center truncate text-[12px] font-medium text-white/70">
+          {window.component === "Terminal" ? (
+            <span className="flex items-center gap-1.5">
+              <Folder className="h-3.5 w-3.5 shrink-0" />
+              mihir — ~/portfolio — -zsh — 80×24
+            </span>
+          ) : (
+            <span className="truncate text-sm font-medium text-white">{window.title}</span>
+          )}
+        </div>
 
         <div className="w-16">{/* Spacer to balance the title */}</div>
       </div>
 
       {/* Window content - fills remaining height and scrolls internally */}
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-black">
+      <div
+        className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
+          window.component === "Terminal" ? "bg-transparent" : "bg-black"
+        }`}
+      >
         {AppComponent ? <AppComponent /> : <div className="p-4 text-white">Content not available</div>}
       </div>
 
