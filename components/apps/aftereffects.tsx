@@ -1,7 +1,17 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
-import { Sparkles, Layers, Wand2, Mail } from "lucide-react"
+import {
+  FolderOpen,
+  Gauge,
+  Home,
+  Layers,
+  LayoutTemplate,
+  Mail,
+  Sparkles,
+  Wand2,
+} from "lucide-react"
 import IOSBackButton from "@/components/ios/ios-back-button"
 
 interface AfterEffectsProps {
@@ -10,17 +20,46 @@ interface AfterEffectsProps {
   onBack?: () => void
 }
 
+const WORKSPACES = ["Composition", "Effects", "Graph", "Render"] as const
+
+const NAV_ITEMS = [
+  { label: "Home", icon: Home },
+  { label: "Compositions", icon: Layers },
+  { label: "Templates", icon: LayoutTemplate },
+  { label: "Motion Graphics", icon: Wand2 },
+] as const
+
+const FEATURES = [
+  { label: "Visual Effects", icon: Sparkles },
+  { label: "Motion Graphics", icon: Layers },
+  { label: "Compositing", icon: Wand2 },
+] as const
+
+const SERVICES = [
+  "Motion Design",
+  "2D Animation",
+  "Explainer Videos",
+  "Logo Animation",
+  "YouTube Graphics",
+  "Visual Effects",
+  "Compositing",
+  "Social Media Ads",
+] as const
+
+/** Spectrum dark surface used for every elevated panel. */
+const PANEL =
+  "bg-[#1f1f23] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+
+const MUTED = "text-zinc-400"
+
 export default function AfterEffects({
   isMobile = false,
   hideAdobeHeader = false,
   onBack,
 }: AfterEffectsProps) {
-  const borderClass = "border-zinc-700"
-  const hoverClass = "hover:bg-zinc-800"
-  const mutedTextClass = "text-zinc-400"
-  const cardClass = "bg-zinc-800 border-zinc-700"
+  const [activeNav, setActiveNav] = useState<string>("Home")
+  const [activeWorkspace, setActiveWorkspace] = useState<string>("Composition")
 
-  const pillClass = "bg-zinc-800"
   const videos = [
     {
       title: "Apple Music UI",
@@ -40,80 +79,106 @@ export default function AfterEffects({
     },
   ]
 
+  const handleConnect = () => {
+    window.location.href = "mailto:pingmihir@outlook.com?subject=After Effects Inquiry"
+  }
+
   return (
     <div
-      className={[
-        isMobile && "relative",
-        "min-h-full flex flex-col",
-        "bg-black text-white",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      className={`relative flex flex-col bg-[#141414] text-white ${
+        isMobile ? "min-h-full" : "h-full"
+      }`}
     >
-
+      {/* Unified macOS toolbar (single header, no redundant app bar) */}
       {!hideAdobeHeader && (
-        <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
-          <div className="flex items-center gap-3">
-            <Image
-              src="/aftereffects.png"
-              alt="After Effects"
-              width={28}
-              height={28}
-              className="object-contain"
-            />
-
-            <span className="font-medium">
+        <div className="flex h-12 shrink-0 items-center gap-3 border-b border-white/10 bg-[#1f1f23]/90 px-4 backdrop-blur-md">
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[#9999ff]/30 bg-[#00005b] text-[11px] font-bold text-[#9999ff]">
+              Ae
+            </span>
+            <span className="truncate text-[13px] font-semibold tracking-tight">
               Adobe After Effects
             </span>
           </div>
-          <button
-            onClick={() =>
-            (window.location.href =
-              "mailto:pingmihir@outlook.com?subject=After Effects Inquiry")
-            }
-            className="flex items-center gap-2 px-3 py-1 rounded bg-indigo-700 hover:bg-indigo-600 transition"
-          >
-            <Mail size={16} />
-            Connect
-          </button>
+
+          {/* Native segmented workspace control */}
+          <div className="hidden shrink-0 items-center gap-0.5 rounded-lg border border-white/10 bg-black/40 p-0.5 sm:flex">
+            {WORKSPACES.map((workspace) => (
+              <button
+                key={workspace}
+                type="button"
+                onClick={() => setActiveWorkspace(workspace)}
+                aria-pressed={activeWorkspace === workspace}
+                className={`rounded-md px-3 py-1 text-[11px] font-medium transition-colors ${
+                  activeWorkspace === workspace
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-white/55 hover:text-white"
+                }`}
+              >
+                {workspace}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-1 justify-end">
+            <button
+              type="button"
+              onClick={handleConnect}
+              className="flex shrink-0 items-center gap-2 rounded-md border border-[#a855f7]/40 bg-[#9333ea] px-3 py-1.5 text-[13px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] transition-colors hover:bg-[#a855f7]"
+            >
+              <Mail size={15} />
+              Connect
+            </button>
+          </div>
         </div>
       )}
-      {/* Content */}
-      <div className="flex flex-1">
-        {/* Sidebar */}
+
+      <div className="flex min-h-0 flex-1">
+        {/* Vibrancy sidebar */}
         {!isMobile && (
-          <div className={`w-64 border-r ${borderClass} p-4`}>
-            <div className="space-y-3">
-              <button
-                className={`w-full text-left px-3 py-2 rounded ${hoverClass}`}
-              >
-                Home
-              </button>
+          <aside className="flex w-60 shrink-0 flex-col border-r border-white/10 bg-[#18181b]/80 backdrop-blur-xl">
+            <nav className="space-y-0.5 p-3">
+              {NAV_ITEMS.map(({ label, icon: Icon }) => {
+                const isActive = activeNav === label
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => setActiveNav(label)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`flex w-full items-center gap-2.5 rounded-md border px-3 py-2 text-[13px] transition-colors ${
+                      isActive
+                        ? "border-[#9333ea]/30 bg-[#9333ea]/20 font-medium text-[#d8b4fe]"
+                        : "border-transparent text-white/70 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <Icon className={`h-4 w-4 ${isActive ? "text-[#d8b4fe]" : "text-white/50"}`} />
+                    {label}
+                  </button>
+                )
+              })}
+            </nav>
 
-              <button
-                className={`w-full text-left px-3 py-2 rounded ${hoverClass}`}
-              >
-                Compositions
-              </button>
-
-              <button
-                className={`w-full text-left px-3 py-2 rounded ${hoverClass}`}
-              >
-                Templates
-              </button>
-
-              <button
-                className={`w-full text-left px-3 py-2 rounded ${hoverClass}`}
-              >
-                Motion Graphics
-              </button>
+            <div className="mt-auto p-3">
+              <div className="space-y-1.5 rounded-lg border border-white/10 bg-white/5 p-3 text-[11px]">
+                <p className="flex items-center gap-2 text-white/70">
+                  <Gauge className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                  RAM Preview: Cached • 60 fps
+                </p>
+                <p className="flex items-center gap-2 text-white/45">
+                  <FolderOpen className="h-3.5 w-3.5 shrink-0" />
+                  Comp 1 saved locally
+                </p>
+              </div>
             </div>
-          </div>
+          </aside>
         )}
-        {/* Main Content */}
+
+        {/* Main canvas */}
         <div
-          className={`flex-1 overflow-auto ${isMobile ? "px-6 pt-28 pb-6" : "p-8"
-            }`}
+          className={`min-h-0 flex-1 overflow-y-auto ${
+            isMobile ? "px-6 pt-28 pb-6" : "p-8"
+          }`}
         >
           {isMobile && onBack && (
             <div className="fixed top-14 left-6 z-50">
@@ -121,10 +186,8 @@ export default function AfterEffects({
             </div>
           )}
 
-          <div
-            className={`flex items-center ${isMobile ? "gap-4 mb-6 mt-4" : "gap-4 mb-8"
-              }`}
-          >
+          {/* Hero */}
+          <div className={`flex items-center gap-4 ${isMobile ? "mb-6 mt-4" : "mb-8"}`}>
             <Image
               src="/aftereffects.png"
               alt="After Effects"
@@ -138,79 +201,70 @@ export default function AfterEffects({
                 After Effects
               </h1>
 
-              <p className={mutedTextClass}>
-                Motion Design • Visuals • Animation
-              </p>
+              <p className={MUTED}>Motion Design • Visuals • Animation</p>
             </div>
           </div>
 
-          {/* Compact Feature Cards */}
+          {/* Specialty cards */}
           <div
-            className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-3 max-w-3xl"
-              } gap-4 mb-10`}
+            className={`mb-10 grid gap-4 ${
+              isMobile ? "grid-cols-1" : "max-w-3xl grid-cols-3"
+            }`}
           >
-            <div
-              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
-                } flex items-center justify-center`}
-            >
-              <Sparkles
-                size={isMobile ? 18 : 24}
-                strokeWidth={2}
-                className={isMobile ? "" : "mb-2 shrink-0"}
-              />
-              <span
-                className={`font-semibold text-center ${isMobile ? "text-[15px]" : "leading-tight"
-                  }`}
+            {FEATURES.map(({ label, icon: Icon }) => (
+              <div
+                key={label}
+                className={`flex items-center gap-3.5 rounded-xl p-3 transition-all hover:-translate-y-0.5 hover:border-[#a855f7]/50 hover:bg-[#242429] ${PANEL}`}
               >
-                {isMobile ? "Visual Effects" : <>Visual<br />Effects</>}
-              </span>
-            </div>
-
-            <div
-              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
-                } flex items-center justify-center`}
-            >
-              <Layers
-                size={isMobile ? 18 : 24}
-                strokeWidth={2}
-                className={isMobile ? "" : "mb-2 shrink-0"}
-              />
-              <span
-                className={`font-semibold text-center ${isMobile ? "text-[15px]" : "leading-tight"
+                <span
+                  className={`flex shrink-0 items-center justify-center rounded-lg bg-[#a855f7]/10 text-[#d8b4fe] ring-1 ring-inset ring-[#a855f7]/25 ${
+                    isMobile ? "h-9 w-9" : "h-11 w-11"
                   }`}
-              >
-                {isMobile ? "Motion Graphics" : <>Motion<br />Graphics</>}
-              </span>
-            </div>
+                >
+                  <Icon size={isMobile ? 16 : 20} strokeWidth={2} />
+                </span>
 
-            <div
-              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 flex-row gap-2" : "h-28 flex-col"
-                } flex items-center justify-center`}
-            >
-              <Wand2
-                size={isMobile ? 18 : 24}
-                strokeWidth={2}
-                className={isMobile ? "" : "mb-2 shrink-0"}
-              />
-              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
-                Compositing
-              </span>
-            </div>
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={`block truncate font-semibold ${
+                      isMobile ? "text-[15px]" : "text-sm"
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </span>
+              </div>
+            ))}
           </div>
-          {/* Featured Work */}
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold mb-6">
-              Check Out
-            </h2>
+          {/* Check Out — Composition viewport showcase */}
+          <div>
+            <div className="mb-6 flex items-baseline justify-between gap-3">
+              <h2 className={`font-semibold ${isMobile ? "text-xl" : "text-2xl"}`}>
+                Check Out
+              </h2>
+              <span className={`truncate text-xs ${MUTED}`}>
+                Composition Viewport • 60 fps
+              </span>
+            </div>
 
-            <div className="space-y-10">
-
+            <div className="space-y-8">
               {videos.map((video) => (
                 <div
                   key={video.title}
-                  className={`rounded-xl overflow-hidden border ${borderClass} ${cardClass}`}
+                  className="overflow-hidden rounded-xl border border-white/10 bg-[#0d0d11] shadow-[0_15px_40px_rgba(0,0,0,0.45)]"
                 >
+                  {/* Composition viewport header */}
+                  <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
+                    <span className="flex items-center gap-2 text-[11px] font-medium text-white/70">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#a855f7]" />
+                      Comp 1
+                    </span>
+                    <span className="truncate font-mono text-[10px] text-white/40">
+                      1920×1080 • 60 fps • Full Resolution
+                    </span>
+                  </div>
+
                   <iframe
                     className="block w-full aspect-video"
                     src={video.embed}
@@ -220,42 +274,33 @@ export default function AfterEffects({
                     allowFullScreen
                   />
 
+                  {/* RAM preview cache line */}
+                  <div className="h-[2px] w-full bg-emerald-400/80" />
+
                   <div className="p-5">
-                    <h3 className="text-xl font-semibold">
-                      {video.title}
-                    </h3>
+                    <h3 className="text-xl font-semibold">{video.title}</h3>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          {/* Services */}
 
+          {/* Services */}
           <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-5">
-              Services
-            </h2>
+            <h2 className="mb-5 text-2xl font-semibold">Services</h2>
 
             <div className="flex flex-wrap gap-3">
-              {[
-                "Motion Design",
-                "2D Animation",
-                "Explainer Videos",
-                "Logo Animation",
-                "YouTube Graphics",
-                "Visual Effects",
-                "Compositing",
-                "Social Media Ads",
-              ].map((skill) => (
+              {SERVICES.map((skill) => (
                 <div
                   key={skill}
-                  className={`px-4 py-2 rounded-full text-sm ${pillClass}`}
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 ring-1 ring-inset ring-white/5"
                 >
                   {skill}
                 </div>
               ))}
             </div>
-          </div>        </div>
+          </div>
+        </div>
       </div>
     </div>
   )

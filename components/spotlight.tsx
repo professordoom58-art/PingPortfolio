@@ -34,7 +34,6 @@ const spotlightApps = [
   { id: "illustrator", title: "Illustrator", icon: "/illustrator.png", component: "Illustrator" },
   { id: "youtube", title: "YouTube", icon: "/youtube.png", component: "YouTube" },
   { id: "spotify", title: "Spotify", icon: "/spotify.png", component: "Spotify" },
-  { id: "snake", title: "Snake", icon: "/snake.png", component: "Snake" },
   { id: "weather", title: "Weather", icon: "/weather.png", component: "Weather" },
 ]
 

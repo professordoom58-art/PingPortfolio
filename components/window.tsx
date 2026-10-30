@@ -10,7 +10,6 @@ import Terminal from "@/components/apps/terminal"
 import Mail from "@/components/apps/mail"
 import YouTube from "@/components/apps/youtube"
 import Spotify from "@/components/apps/spotify"
-import Snake from "@/components/apps/snake"
 import Weather from "@/components/apps/weather"
 import PremierePro from "@/components/apps/premierepro"
 import AfterEffects from "@/components/apps/aftereffects"
@@ -28,14 +27,18 @@ import {
 
 const componentMap: Record<
   string,
-  React.ComponentType<{ isMobile?: boolean }>
+  React.ComponentType<{
+    isMobile?: boolean
+    onClose?: () => void
+    onMinimize?: () => void
+    onMaximize?: () => void
+  }>
 > = {
   Notes,
   Terminal,
   Mail,
   YouTube,
   Spotify,
-  Snake,
   Weather,
   PremierePro,
   AfterEffects,
@@ -228,6 +231,11 @@ export default function Window({
 
   const titleBarClass = isActive ? "bg-gray-800" : "bg-gray-900"
 
+  // The Weather app draws its own chrome over a full-bleed sky gradient, so the
+  // standard title bar becomes a transparent drag strip with no duplicate
+  // traffic lights or title text.
+  const isWeather = window.component === "Weather"
+
   return (
     <div
       ref={windowRef}
@@ -245,53 +253,67 @@ export default function Window({
     >
       {/* Title bar - fixed height, never shrinks, the only drag handle */}
       <div
-        className={`window-header flex h-8 shrink-0 items-center px-3 ${titleBarClass} ${
-          isMaximized ? "cursor-default" : "cursor-grab active:cursor-grabbing"
-        }`}
+        className={`window-header flex h-8 items-center px-3 ${
+          isWeather
+            ? "absolute inset-x-0 top-0 z-10 shrink-0 bg-transparent"
+            : `shrink-0 ${titleBarClass}`
+        } ${isMaximized ? "cursor-default" : "cursor-grab active:cursor-grabbing"}`}
         onMouseDown={handleTitleBarMouseDown}
       >
-        <div className="window-controls flex items-center space-x-2 mr-4">
-          <button
-            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center"
-            onClick={onClose}
-          >
-            <X className="w-2 h-2 text-red-800 opacity-0 hover:opacity-100" />
-          </button>
-          <button
-            className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center"
-            onClick={handleMinimize}
-          >
-            <Minus className="w-2 h-2 text-yellow-800 opacity-0 hover:opacity-100" />
-          </button>
-          <button
-            className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center"
-            onClick={toggleMaximize}
-          >
-            <ArrowsMaximize className="w-2 h-2 text-green-800 opacity-0 hover:opacity-100" />
-          </button>
-        </div>
+        {!isWeather && (
+          <>
+            <div className="window-controls flex items-center space-x-2 mr-4">
+              <button
+                className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center"
+                onClick={onClose}
+              >
+                <X className="w-2 h-2 text-red-800 opacity-0 hover:opacity-100" />
+              </button>
+              <button
+                className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center"
+                onClick={handleMinimize}
+              >
+                <Minus className="w-2 h-2 text-yellow-800 opacity-0 hover:opacity-100" />
+              </button>
+              <button
+                className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center"
+                onClick={toggleMaximize}
+              >
+                <ArrowsMaximize className="w-2 h-2 text-green-800 opacity-0 hover:opacity-100" />
+              </button>
+            </div>
 
-        <div className="flex flex-1 items-center justify-center truncate text-[12px] font-medium text-white/70">
-          {window.component === "Terminal" ? (
-            <span className="flex items-center gap-1.5">
-              <Folder className="h-3.5 w-3.5 shrink-0" />
-              mihir — ~/portfolio — -zsh — 80×24
-            </span>
-          ) : (
-            <span className="truncate text-sm font-medium text-white">{window.title}</span>
-          )}
-        </div>
+            <div className="flex flex-1 items-center justify-center truncate text-[12px] font-medium text-white/70">
+              {window.component === "Terminal" ? (
+                <span className="flex items-center gap-1.5">
+                  <Folder className="h-3.5 w-3.5 shrink-0" />
+                  mihir — ~/portfolio — -zsh — 80×24
+                </span>
+              ) : (
+                <span className="truncate text-sm font-medium text-white">{window.title}</span>
+              )}
+            </div>
 
-        <div className="w-16">{/* Spacer to balance the title */}</div>
+            <div className="w-16">{/* Spacer to balance the title */}</div>
+          </>
+        )}
       </div>
 
       {/* Window content - fills remaining height and scrolls internally */}
       <div
         className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
-          window.component === "Terminal" ? "bg-transparent" : "bg-black"
+          window.component === "Terminal" || isWeather ? "bg-transparent" : "bg-black"
         }`}
       >
-        {AppComponent ? <AppComponent /> : <div className="p-4 text-white">Content not available</div>}
+        {AppComponent ? (
+          <AppComponent
+            onClose={onClose}
+            onMinimize={handleMinimize}
+            onMaximize={toggleMaximize}
+          />
+        ) : (
+          <div className="p-4 text-white">Content not available</div>
+        )}
       </div>
 
       {/* Resize handles */}

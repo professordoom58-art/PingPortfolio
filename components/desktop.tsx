@@ -6,12 +6,14 @@ import { useState, useEffect, useRef } from "react"
 import Dock from "@/components/dock"
 import Menubar from "@/components/menubar"
 import Wallpaper from "@/components/wallpaper"
+import BootIntro from "@/components/boot-intro"
 import Window from "@/components/window"
 import Launchpad from "@/components/launchpad"
 import ControlCenter from "@/components/control-center"
 import Spotlight from "@/components/spotlight"
 import AboutThisMac from "@/components/about-this-mac"
 import SiriAssistant from "@/components/siri-assistant"
+import IdleHintsOverlay, { ENABLE_IDLE_HINTS } from "@/components/idle-hints-overlay"
 import { MusicProvider } from "@/components/music-provider"
 import type { AppWindow } from "@/types"
 import { IOSProfileWidget } from "@/components/ios/ios-profile-widget";
@@ -37,11 +39,15 @@ export default function Desktop({
   const [showLaunchpad, setShowLaunchpad] = useState(false)
   const [showControlCenter, setShowControlCenter] = useState(false)
   const [showSpotlight, setShowSpotlight] = useState(false)
+  // True until the boot intro has docked in the top-left; idle hints wait for it.
+  const [introActive, setIntroActive] = useState(true)
   const [screenBrightness, setScreenBrightness] = useState(initialBrightness)
   const [wifiEnabled, setWifiEnabled] = useState(true)
   const [wifiNetwork, setWifiNetwork] = useState("Home")
   const [showAbout, setShowAbout] = useState(false)
-  const [showSiri, setShowSiri] = useState(false)
+  // Apple Intelligence opens with the desktop on first load; it can be
+  // dismissed via click-outside, Escape, or the menu-bar orb.
+  const [showSiri, setShowSiri] = useState(true)
   const desktopRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -189,6 +195,9 @@ export default function Desktop({
       >
         <Wallpaper />
 
+        {/* Startup intro: fades in centred, then glides to the top-left and stays there */}
+        <BootIntro onComplete={() => setIntroActive(false)} />
+
         <Menubar
           time={time}
           onSleep={onSleep}
@@ -221,7 +230,7 @@ export default function Desktop({
         />
 
         {/* Desktop Widget - stays in the background desktop layer, links stay clickable */}
-        <div className="absolute left-6 top-10 z-10">
+        <div className="absolute left-1/2 top-10 z-10 -translate-x-1/2">
           <IOSProfileWidget desktop />
         </div>
 
@@ -279,6 +288,20 @@ export default function Desktop({
           <AboutThisMac
             onClose={() => setShowAbout(false)}
             onMoreInfo={() => openAppById("notes", "Notes", "Notes")}
+          />
+        )}
+
+        {/* Idle handwritten hints — disabled by ENABLE_IDLE_HINTS in idle-hints-overlay.tsx */}
+        {ENABLE_IDLE_HINTS && (
+          <IdleHintsOverlay
+            enabled={
+              !introActive &&
+              openWindows.length === 0 &&
+              !showLaunchpad &&
+              !showControlCenter &&
+              !showSpotlight &&
+              !showAbout
+            }
           />
         )}
 

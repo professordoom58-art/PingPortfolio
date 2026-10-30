@@ -113,9 +113,12 @@ export default function SiriAssistant({ onClose, onLaunchApp }: SiriAssistantPro
 
       <div className="relative z-10">
         <div className="mb-3 flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-[#ff4593] via-[#a855f7] to-[#38bdf8]">
-            <Sparkles className="h-3 w-3 text-white" />
-          </span>
+          <img
+            src="/apple-intelligence.png"
+            alt="Apple Intelligence"
+            className="w-8 h-8 object-contain select-none"
+            draggable={false}
+          />
           <span className="text-[13px] font-semibold">Apple Intelligence</span>
         </div>
 

@@ -78,20 +78,6 @@ function BatteryIcon({ className }: { className?: string }) {
   )
 }
 
-/** Siri / Apple Intelligence orb. */
-function SiriOrb({ className }: { className?: string }) {
-  return (
-    <span
-      className={`flex items-center justify-center rounded-full bg-gradient-to-tr from-[#ff4593] via-[#a855f7] to-[#38bdf8] shadow-sm ${className}`}
-      aria-hidden="true"
-    >
-      <span className="flex h-full w-full items-center justify-center rounded-full ring-1 ring-inset ring-white/45">
-        <span className="h-1/2 w-1/2 rounded-full bg-white/35 blur-[1px]" />
-      </span>
-    </span>
-  )
-}
-
 /* Apple menu row + divider primitives, so every item matches exactly. */
 const appleRow =
   "w-full px-2.5 py-[5px] rounded-[7px] text-[13px] leading-tight font-normal text-white/95 flex items-center justify-between hover:bg-[#007AFF] hover:text-white transition-none cursor-default group"
@@ -402,7 +388,12 @@ export default function Menubar({
             isSiriOpen ? "bg-white/20" : "hover:bg-white/10"
           }`}
         >
-          <SiriOrb className="h-[15px] w-[15px]" />
+          <img
+            src="/apple-intelligence.png"
+            alt="Apple Intelligence"
+            className="w-4 h-4 object-contain select-none"
+            draggable={false}
+          />
         </button>
 
         {/* 6. Date and time */}

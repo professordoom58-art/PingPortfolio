@@ -6,18 +6,38 @@ import { useState, useRef, useEffect } from "react"
 import { MoreHorizontal } from "lucide-react"
 import type { AppWindow } from "@/types"
 
-// Updated app list with Snake game
+// Apps pinned to the dock, mirroring the Launchpad grid.
+//
+// `iconScale` is an optical correction, not decoration. Every PNG below is drawn on a
+// square canvas, but the squircle inside it covers a different share of that canvas.
+// Coverage = height of the visible squircle (alpha >= 128, i.e. where the icon is at
+// least half opaque) divided by canvas height:
+//
+//   launchpad 100.0%   mail 89.8%   notes 94.8%   weather 94.8%
+//   premiere / aftereffects / photoshop / illustrator / terminal / youtube / spotify 80.5%
+//
+// Dropped into the same 48px slot that makes Finder look ~22% bigger than the Adobe
+// icons. Each factor is  target / (slot * coverage)  with target = 42px, so the visible
+// squircle of every icon is 41.8-42.2px tall and they all sit on one guide line.
+//
+//   launchpad     42 / (48 * 1.0000) = 0.875 -> scale-[0.88]
+//   mail          42 / (48 * 0.8984) = 0.974 -> scale-[0.97]
+//   notes/weather 42 / (48 * 0.9475) = 0.923 -> scale-[0.92]
+//   adobe/term/yt/spotify  42 / (48 * 0.8047) = 1.087 -> scale-[1.09]
+//
+// Keep these as literal class strings: Tailwind only generates a utility it can find
+// verbatim in the source, so a computed `scale-[${n}]` would silently produce nothing.
 const dockApps = [
-  { id: "launchpad", title: "Launchpad", icon: "/launchpad.png", component: "Launchpad", isSystem: true },
-  { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail" },
-  { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
-  { id: "premiere", title: "Premiere Pro", icon: "/premiere.png", component: "PremierePro" },
-  { id: "aftereffects", title: "After Effects", icon: "/aftereffects.png", component: "AfterEffects" },
-  { id: "photoshop", title: "Photoshop", icon: "/photoshop.png", component: "Photoshop" },
-  { id: "illustrator", title: "Illustrator", icon: "/illustrator.png", component: "Illustrator" },
-  { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal" },
-  { id: "youtube", title: "YouTube", icon: "/youtube.png", component: "YouTube" },
-  { id: "spotify", title: "Spotify", icon: "/spotify.png", component: "Spotify" },
+  { id: "launchpad", title: "Launchpad", icon: "/launchpad.png", component: "Launchpad", isSystem: true, iconScale: "scale-[0.88]" },
+  { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail", iconScale: "scale-[0.97]" },
+  { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes", iconScale: "scale-[0.92]" },
+  { id: "premiere", title: "Premiere Pro", icon: "/premiere.png", component: "PremierePro", iconScale: "scale-[1.09]" },
+  { id: "aftereffects", title: "After Effects", icon: "/aftereffects.png", component: "AfterEffects", iconScale: "scale-[1.09]" },
+  { id: "photoshop", title: "Photoshop", icon: "/photoshop.png", component: "Photoshop", iconScale: "scale-[1.09]" },
+  { id: "illustrator", title: "Illustrator", icon: "/illustrator.png", component: "Illustrator", iconScale: "scale-[1.09]" },
+  { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal", iconScale: "scale-[1.09]" },
+  { id: "youtube", title: "YouTube", icon: "/youtube.png", component: "YouTube", iconScale: "scale-[1.09]" },
+  { id: "spotify", title: "Spotify", icon: "/spotify.png", component: "Spotify", iconScale: "scale-[1.09]" },
 ]
 
 interface DockProps {
@@ -144,7 +164,7 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds }: Doc
                   <img
                     src={app.icon || "/placeholder.svg"}
                     alt={app.title}
-                    className="w-12 h-12 object-contain"
+                    className={`w-12 h-12 object-contain ${app.iconScale}`}
                     draggable="false"
                   />
                 </div>
@@ -180,17 +200,25 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds }: Doc
               onClick={() => handleAppClick(app)}
             >
               <div
-                className="relative cursor-pointer"
+                className={`relative flex shrink-0 cursor-pointer items-center justify-center ${
+                  isMobile ? "h-14 w-14" : "h-12 w-12"
+                }`}
                 style={{
                   transform: isMobile ? "none" : `scale(${scale})`,
                   transformOrigin: "bottom center",
                   transition: mouseX === null ? "transform 0.2s ease-out" : "none",
                 }}
               >
+                {/*
+                  Fixed square slot (48px desktop / 56px mobile) + `iconScale`, which
+                  normalises the transparent padding baked into each PNG around the
+                  slot's centre. Hover magnification stays on this wrapper, so it
+                  multiplies the optical scale instead of replacing it.
+                */}
                 <img
                   src={app.icon || "/placeholder.svg"}
                   alt={app.title}
-                  className={`object-contain ${isMobile ? "w-14 h-14" : "w-12 h-12"}`}
+                  className={`object-contain ${isMobile ? "h-14 w-14" : "h-12 w-12"} ${app.iconScale}`}
                   draggable="false"
                 />
 

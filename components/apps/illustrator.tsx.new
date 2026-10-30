@@ -1,0 +1,277 @@
+﻿"use client"
+
+import Image from "next/image"
+import { useState } from "react"
+import { PenTool, Palette, Shapes, Mail } from "lucide-react"
+import { X } from "lucide-react"
+import IOSBackButton from "@/components/ios/ios-back-button"
+
+interface IllustratorProps {
+  isMobile?: boolean
+  hideAdobeHeader?: boolean
+  onBack?: () => void
+}
+export default function Illustrator({
+  isMobile = false,
+  hideAdobeHeader = false,
+  onBack,
+}: IllustratorProps) {
+  const borderClass = "border-zinc-700"
+  const hoverClass = "hover:bg-zinc-800"
+  const mutedTextClass = "text-zinc-400"
+  const cardClass = "bg-zinc-800 border-zinc-700"
+  const pillClass = "bg-zinc-800"
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
+
+  return (
+    <div className="min-h-full flex flex-col bg-black text-white">
+      {!hideAdobeHeader && (
+        <div className={`h-12 border-b ${borderClass} px-4 flex items-center justify-between`}>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/illustrator.png"
+              alt="Illustrator"
+              width={28}
+              height={28}
+            />
+            <span>Adobe Illustrator</span>
+          </div>
+
+          <button
+            onClick={() =>
+            (window.location.href =
+              "mailto:pingmihir@outlook.com?subject=Illustrator Inquiry")
+            }
+            className="flex items-center gap-2 px-3 py-1 rounded bg-orange-700 hover:bg-orange-600"
+          >
+            <Mail size={16} />
+            Connect
+          </button>
+        </div>
+      )}
+
+      <div className="flex flex-1">
+
+        {!isMobile && (
+          <div className={`w-64 border-r ${borderClass} p-4`}>
+            <div className="space-y-2">
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Home
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Vector Projects
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Branding
+              </button>
+              <button className={`block w-full text-left p-2 rounded ${hoverClass}`}>
+                Templates
+              </button>
+            </div>
+          </div>)}
+
+        <div
+          className={`flex-1 overflow-auto ${isMobile ? "px-6 pt-28 pb-6" : "p-8"
+            }`}
+        >
+          {isMobile && onBack && (
+            <div className="fixed top-14 left-6 z-50">
+              <IOSBackButton onClick={onBack} />
+            </div>
+          )}
+
+          <div
+            className={`flex items-center ${isMobile ? "gap-3 mb-6 mt-4" : "gap-4 mb-8"
+              }`}
+          >
+            <Image
+              src="/illustrator.png"
+              alt="Illustrator"
+              width={isMobile ? 56 : 64}
+              height={isMobile ? 56 : 64}
+            />
+
+            <div>
+              <h1 className={isMobile ? "text-2xl font-bold" : "text-3xl font-bold"}>Illustrator</h1>
+              <p className={mutedTextClass}>
+                Vector Design â€¢ Branding â€¢ Illustration
+              </p>
+            </div>
+          </div>
+
+          {/* Expertise */}
+          <div
+            className={`mt-8 grid gap-4 mb-10 ${isMobile ? "grid-cols-1" : "md:grid-cols-3 max-w-4xl"
+              }`}
+          >
+            <div
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
+            >
+              <PenTool
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
+                Thumbnails
+              </span>
+            </div>
+
+            <div
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
+            >
+              <Palette
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
+                Infographics
+              </span>
+            </div>
+
+            <div
+              className={`rounded-xl border ${cardClass} ${isMobile ? "h-16 gap-2" : "h-24 gap-3 px-5"
+                } flex items-center justify-center`}
+            >
+              <Shapes
+                size={isMobile ? 18 : 22}
+                strokeWidth={2}
+                className="shrink-0"
+              />
+              <span className={isMobile ? "text-[15px] font-semibold" : "font-semibold"}>
+                Branding
+              </span>
+            </div>
+          </div>
+          {/* Portfolio */}
+
+          <div className="mt-10">
+            <h2 className="text-xl font-semibold mb-5">
+              Check Out
+            </h2>
+
+            <div
+              className={
+                isMobile
+                  ? "space-y-5"
+                  : "grid grid-cols-2 gap-5"
+              }
+            >
+              {[
+                {
+                  image: "/thumb1.jpg",
+                  title: "Thumbnail Design",
+                },
+                {
+                  image: "/thumb2.jpg",
+                  title: "Infographic",
+                },
+                {
+                  image: "/thumb3.jpg",
+                  title: "Brand Artwork",
+                },
+                {
+                  image: "/thumb4.jpg",
+                  title: "Media Graphic",
+                },
+
+              ].map((item) => (
+                <div
+                  key={item.image}
+                  onClick={() => setSelectedImage(item.image)}
+                  className="group cursor-pointer overflow-hidden rounded-2xl"
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={1280}
+                    height={720}
+                    className={`w-full object-cover transition-transform duration-300 group-hover:scale-105 ${isMobile ? "h-52" : "aspect-video"
+                      }`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Services */}
+          <div className="mt-10">
+            <h2 className="text-xl font-semibold mb-4">
+              Services
+            </h2>
+
+            <div className="flex flex-wrap gap-3">
+              {[
+                "YouTube Thumbnails",
+                "Infographics",
+                "Brand Assets",
+                "Vector Graphics",
+                "Typography",
+                "Identity Design",
+                "Media Graphics",
+                "Video Assets",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className={`px-4 py-2 rounded-full ${pillClass}`}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Image Preview */}
+
+          {selectedImage && (
+            <div
+              className={`fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md flex ${isMobile
+                ? "items-center justify-center p-4"
+                : "items-center justify-center"
+                }`}
+              onClick={() => setSelectedImage(null)}
+            >
+              <div
+                className={`relative bg-black ${isMobile
+                  ? "w-[94vw] max-w-none rounded-3xl p-4"
+                  : "max-w-6xl w-full rounded-2xl p-6"
+                  }`}
+              >
+                {!isMobile && (
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="absolute top-4 right-4 w-7 h-7 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors"
+                  >
+                    <X size={13} className="text-white" strokeWidth={2.5} />
+                  </button>
+                )}
+
+                <Image
+                  src={selectedImage}
+                  alt="Preview"
+                  width={1920}
+                  height={1080}
+                  onClick={() => isMobile && setSelectedImage(null)}
+                  className={`w-full object-contain cursor-pointer ${isMobile
+                    ? "rounded-2xl"
+                    : "max-h-[70vh] rounded-xl"
+                    }`}
+                />
+                {!isMobile && (
+                  <div className="mt-5 text-center">
+                    <p className="text-zinc-400">
+                      Created using Adobe Illustrator
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div >
+  )
+}

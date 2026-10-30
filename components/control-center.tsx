@@ -146,7 +146,7 @@ const glass =
 
 /** Circular button shell. Colour is decided by the caller, never hardcoded. */
 const circleBase =
-  "flex aspect-square items-center justify-center rounded-full transition-all active:scale-95"
+  "flex h-[68px] w-[68px] shrink-0 items-center justify-center rounded-full transition-all active:scale-95"
 
 /** Active surface: solid white so the blue icon reads clearly. */
 const circleOn = "border border-white bg-white shadow-md"
@@ -204,19 +204,19 @@ export default function ControlCenter({
 
   return (
     <div
-      className="fixed right-4 top-10 z-40 w-[320px] origin-top-right animate-in fade-in zoom-in-95 duration-200"
+      className="fixed right-4 top-10 z-40 w-[308px] origin-top-right animate-in fade-in zoom-in-95 duration-200"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid w-[308px] auto-rows-[68px] grid-cols-4 gap-3">
         {/* ---------- Wi-Fi pill (rows 1, cols 1-2) ---------- */}
         <button
           type="button"
           onClick={() => onWifiEnabledChange(!wifiEnabled)}
           aria-pressed={wifiEnabled}
-          className={`col-span-2 flex h-14 cursor-pointer items-center gap-3 rounded-full p-2 text-left transition-all ${glass}`}
+          className={`col-span-2 flex h-[68px] cursor-pointer items-center gap-3 rounded-full px-2.5 text-left transition-all ${glass}`}
         >
           <span
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
+            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors ${
               wifiEnabled ? "bg-white" : "bg-white/10"
             }`}
           >
@@ -236,7 +236,7 @@ export default function ControlCenter({
 
         {/* ---------- Media card (rows 1-2, cols 3-4) ---------- */}
         <div
-          className={`col-span-2 row-span-2 flex flex-col justify-between rounded-[26px] p-3.5 ${glass}`}
+          className={`col-span-2 row-span-2 flex h-[148px] flex-col justify-between rounded-[28px] p-3.5 ${glass}`}
         >
           {/* Album art + title open the Spotify window */}
           <button
@@ -319,10 +319,10 @@ export default function ControlCenter({
           type="button"
           onClick={() => setFocusEnabled((prev) => !prev)}
           aria-pressed={focusEnabled}
-          className={`col-span-2 flex h-14 cursor-pointer items-center gap-3 rounded-full p-2 text-left transition-all ${glass}`}
+          className={`col-span-2 flex h-[68px] cursor-pointer items-center gap-3 rounded-full px-2.5 text-left transition-all ${glass}`}
         >
           <span
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
+            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors ${
               focusEnabled ? "bg-white" : "bg-white/15"
             }`}
           >
